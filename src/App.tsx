@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import RequestBar from "./components/RequestBar";
 import { useState } from "react";
 import TableView from "./components/TableView";
+import Footer from "./components/Footer";
 
 function App() {
   const [view, setView] = useState("List");
@@ -14,6 +15,7 @@ function App() {
       <Hero />
       <RequestBar view={view} setView={setView} />
       {view === "List" ? <ListView /> : <TableView />}
+      <Footer />
     </main>
   );
 }
