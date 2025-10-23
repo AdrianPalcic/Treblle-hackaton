@@ -183,7 +183,7 @@ const RequestBar = ({
                 <ChevronsUpDown size={20} className="hidden md:block" />
               </div>
               {openDropdown === "time" && (
-                <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-[1000]">
+                <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-1000">
                   {timeOptions.map((option) => (
                     <div
                       key={option}
@@ -255,7 +255,7 @@ const RequestBar = ({
                     <ChevronsUpDown size={20} className="hidden md:block" />
                   </div>
                   {openDropdown === "response" && (
-                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[180px] z-[1000]">
+                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[180px] z-1000">
                       {responseOptions.map((option) => (
                         <div
                           key={option.value}
@@ -329,7 +329,7 @@ const RequestBar = ({
                     <ChevronsUpDown size={20} className="hidden md:block" />
                   </div>
                   {openDropdown === "problemType" && (
-                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-[1000]">
+                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-1000">
                       {problemTypeOptions.map((option) => (
                         <div
                           key={option.value}
@@ -363,7 +363,7 @@ const RequestBar = ({
                     <ChevronsUpDown size={20} className="hidden md:block" />
                   </div>
                   {openDropdown === "severity" && (
-                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-[1000]">
+                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-1000">
                       {severityOptions.map((option) => (
                         <div
                           key={option.value}
