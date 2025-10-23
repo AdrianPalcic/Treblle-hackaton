@@ -71,3 +71,88 @@
     border-radius: 2px;
   }
 }
+
+/* Hero bubble animations */
+@keyframes float1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 40px) scale(0.95);
+  }
+}
+
+@keyframes float2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-60px, 40px) scale(1.05);
+  }
+  66% {
+    transform: translate(40px, -50px) scale(0.9);
+  }
+}
+
+@keyframes float3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, 50px) scale(0.92);
+  }
+  66% {
+    transform: translate(-50px, -30px) scale(1.08);
+  }
+}
+
+@keyframes float4 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-40px, -40px) scale(1.06);
+  }
+  66% {
+    transform: translate(60px, 30px) scale(0.94);
+  }
+}
+
+@keyframes colorShift1 {
+  0%, 100% {
+    filter: blur(150px) hue-rotate(0deg);
+  }
+  50% {
+    filter: blur(150px) hue-rotate(30deg);
+  }
+}
+
+@keyframes colorShift2 {
+  0%, 100% {
+    filter: blur(140px) hue-rotate(0deg);
+  }
+  50% {
+    filter: blur(140px) hue-rotate(-20deg);
+  }
+}
+
+@keyframes colorShift3 {
+  0%, 100% {
+    filter: blur(160px) hue-rotate(0deg);
+  }
+  50% {
+    filter: blur(160px) hue-rotate(25deg);
+  }
+}
+
+@keyframes colorShift4 {
+  0%, 100% {
+    filter: blur(135px) hue-rotate(0deg);
+  }
+  50% {
+    filter: blur(135px) hue-rotate(-15deg);
+  }
+}

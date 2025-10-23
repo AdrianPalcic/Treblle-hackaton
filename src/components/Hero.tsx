@@ -2,31 +2,35 @@ const Hero = () => {
   return (
     <section id="hero" className="px-4 relative">
       <div
-        className="absolute top-[-10%] left-[-5%] w-[700px] h-[750px] rounded-full opacity-65 blur-[150px] pointer-events-none"
+        className="absolute top-[-10%] left-[-5%] w-[700px] h-[750px] rounded-full opacity-65 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, #e1207a 0%, #ff6b35 35%, #f5348e 55%, transparent 75%)",
+          animation: "float1 20s ease-in-out infinite, colorShift1 15s ease-in-out infinite",
         }}
       />
       <div
-        className="absolute top-[15%] right-[-10%] w-[680px] h-[720px] rounded-full opacity-70 blur-[140px] pointer-events-none"
+        className="absolute top-[15%] right-[-10%] w-[680px] h-[720px] rounded-full opacity-70 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, #ff6b35 0%, #ff8c42 30%, #e1207a 55%, transparent 75%)",
+          animation: "float2 25s ease-in-out infinite, colorShift2 18s ease-in-out infinite",
         }}
       />
       <div
-        className="absolute bottom-[-20%] right-[-5%] w-[800px] h-[850px] rounded-full opacity-75 blur-[160px] pointer-events-none"
+        className="absolute bottom-[-20%] right-[-5%] w-[800px] h-[850px] rounded-full opacity-75 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, #9103eb 0%, #e1207a 38%, #ff6b35 65%, transparent 80%)",
+          animation: "float3 22s ease-in-out infinite, colorShift3 20s ease-in-out infinite",
         }}
       />
       <div
-        className="absolute bottom-[5%] left-[-8%] w-[650px] h-[700px] rounded-full opacity-60 blur-[135px] pointer-events-none"
+        className="absolute bottom-[5%] left-[-8%] w-[650px] h-[700px] rounded-full opacity-60 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, #ff8c42 0%, #9103eb 45%, #e1207a 75%, transparent 85%)",
+          animation: "float4 28s ease-in-out infinite, colorShift4 16s ease-in-out infinite",
         }}
       />
 
