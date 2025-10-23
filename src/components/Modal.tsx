@@ -72,19 +72,20 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div className="relative w-full max-w-3xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto glass rounded-2xl md:rounded-3xl p-4 md:p-6">
-        {/* Header */}
         <div className="flex justify-between items-start mb-4 md:mb-6">
           <div>
-            <h2 className="text-lg md:text-2xl font-semibold mb-1 md:mb-2">API Call Details</h2>
-            <p className="text-white/60 text-xs md:text-sm">{apiCall.timestamp}</p>
+            <h2 className="text-lg md:text-2xl font-semibold mb-1 md:mb-2">
+              API Call Details
+            </h2>
+            <p className="text-white/60 text-xs md:text-sm">
+              {apiCall.timestamp}
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -95,7 +96,6 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
           </button>
         </div>
 
-        {/* Method and Status */}
         <div className="flex flex-wrap gap-2 md:gap-3 items-center mb-4 md:mb-6">
           <div
             className={`method py-1.5 md:py-2 px-3 md:px-4 rounded-full text-[14px] md:text-[18px] font-semibold ${getMethodColor(
@@ -113,9 +113,10 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
           </div>
         </div>
 
-        {/* Endpoint with Copy Button */}
         <div className="mb-4 md:mb-6">
-          <label className="text-xs md:text-sm text-white/60 mb-2 block">Endpoint</label>
+          <label className="text-xs md:text-sm text-white/60 mb-2 block">
+            Endpoint
+          </label>
           <div className="flex gap-2 items-center">
             <div className="flex-1 bg-tetriary/50 rounded-xl p-2 md:p-3 font-mono text-xs md:text-sm break-all">
               https://api.example.com/{apiCall.endpoint}
@@ -145,22 +146,37 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
             <label className="text-xs md:text-sm text-white/60 mb-1 block">
               Response Time
             </label>
-            <p className="text-base md:text-lg font-semibold">{apiCall.responseTime}</p>
+            <p className="text-base md:text-lg font-semibold">
+              {apiCall.responseTime}
+            </p>
           </div>
           <div className="bg-tetriary/30 rounded-xl p-3 md:p-4">
-            <label className="text-xs md:text-sm text-white/60 mb-1 block">Location</label>
-            <p className="text-base md:text-lg font-semibold truncate">{apiCall.location}</p>
+            <label className="text-xs md:text-sm text-white/60 mb-1 block">
+              Location
+            </label>
+            <p className="text-base md:text-lg font-semibold truncate">
+              {apiCall.location}
+            </p>
           </div>
         </div>
 
         {/* Response Headers */}
         <div className="mb-4 md:mb-6">
-          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">Response Headers</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
+            Response Headers
+          </h3>
           <div className="bg-tetriary/30 rounded-xl p-3 md:p-4 space-y-2">
             {Object.entries(headers).map(([key, value]) => (
-              <div key={key} className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1">
-                <span className="text-white/60 font-mono text-xs md:text-sm">{key}:</span>
-                <span className="font-mono text-xs md:text-sm break-all">{value}</span>
+              <div
+                key={key}
+                className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1"
+              >
+                <span className="text-white/60 font-mono text-xs md:text-sm">
+                  {key}:
+                </span>
+                <span className="font-mono text-xs md:text-sm break-all">
+                  {value}
+                </span>
               </div>
             ))}
           </div>
@@ -168,7 +184,9 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
 
         {/* Response Body */}
         <div className="mb-2 md:mb-4">
-          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">Response Body</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
+            Response Body
+          </h3>
           <div className="bg-tetriary/30 rounded-xl p-3 md:p-4">
             <pre className="text-xs md:text-sm font-mono overflow-x-auto text-white/90">
               {JSON.stringify(responseBody, null, 2)}

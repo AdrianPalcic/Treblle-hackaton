@@ -26,7 +26,9 @@ const RequestBar = ({
   selectedResponse: string;
   setSelectedResponse: React.Dispatch<React.SetStateAction<string>>;
   activeSort: "createdAt" | "responseTime";
-  setActiveSort: React.Dispatch<React.SetStateAction<"createdAt" | "responseTime">>;
+  setActiveSort: React.Dispatch<
+    React.SetStateAction<"createdAt" | "responseTime">
+  >;
   sortByCreatedAt: "latest" | "oldest";
   setSortByCreatedAt: React.Dispatch<React.SetStateAction<"latest" | "oldest">>;
   sortByResponseTime: "fastest" | "slowest";
@@ -219,11 +221,7 @@ const RequestBar = ({
                   sortByCreatedAt === "latest" ? "oldest" : "latest"
                 );
               }}
-              className={`tag flex items-center gap-1 py-1.5 md:py-2 px-2 md:px-4 rounded-full cursor-pointer hover:bg-fifth transition-colors text-xs md:text-sm whitespace-nowrap ${
-                activeSort === "createdAt" 
-                  ? "bg-primary/20 border-primary/40" 
-                  : "bg-fourth opacity-60"
-              }`}
+              className="tag flex items-center gap-1 py-1.5 md:py-2 px-2 md:px-4 rounded-full cursor-pointer bg-fourth hover:bg-fifth transition-colors text-xs md:text-sm whitespace-nowrap "
             >
               <ArrowUpDown size={16} className="md:hidden" />
               <ArrowUpDown size={18} className="hidden md:block" />
@@ -242,11 +240,7 @@ const RequestBar = ({
                   sortByResponseTime === "fastest" ? "slowest" : "fastest"
                 );
               }}
-              className={`tag flex items-center gap-1 py-1.5 md:py-2 px-2 md:px-4 rounded-full cursor-pointer hover:bg-fifth transition-colors text-xs md:text-sm whitespace-nowrap ${
-                activeSort === "responseTime" 
-                  ? "bg-primary/20 border-primary/40" 
-                  : "bg-fourth opacity-60"
-              }`}
+              className="tag flex items-center gap-1 py-1.5 md:py-2 px-2 md:px-4 rounded-full cursor-pointer bg-fourth hover:bg-fifth transition-colors text-xs md:text-sm whitespace-nowrap "
             >
               <ArrowUpDown size={16} className="md:hidden" />
               <ArrowUpDown size={18} className="hidden md:block" />
