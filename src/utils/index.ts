@@ -26,8 +26,9 @@ export const getTimeDifference = (timestamp: string) => {
 
 export const detectProblems = (apiResponses: APIResponse[]): Problem[] => {
   const problems: Problem[] = [];
-  const SLOW_THRESHOLD = 1000;
-  const VERY_SLOW_THRESHOLD = 2000;
+  const SLOW_THRESHOLD = 400;
+  const VERY_SLOW_THRESHOLD = 1000;
+  let problemId = 1;
 
   apiResponses.forEach((response) => {
     const responseTimeMs = parseFloat(response.responseTime.replace("ms", ""));
@@ -38,14 +39,14 @@ export const detectProblems = (apiResponses: APIResponse[]): Problem[] => {
     if (isError || isSlow) {
       let type: ProblemType;
       let severity: ProblemSeverity;
-      let errorMessage: string | undefined;
+      let errorMessage: string;
 
-      if (isError && isVerySlow) {
+      if (isError && isSlow) {
         type = "critical";
         severity = "high";
-        errorMessage = `${
-          response.status >= 500 ? "Server" : "Client"
-        } error with very slow response`;
+        const errorType = response.status >= 500 ? "Server error" : "Client error";
+        const speedType = isVerySlow ? "very slow" : "slow";
+        errorMessage = `${errorType} (${response.status}) with ${speedType} response time (${response.responseTime}) - endpoint may be experiencing issues`;
       } else if (isError) {
         type = "error";
         severity = response.status >= 500 ? "high" : "medium";
@@ -64,7 +65,7 @@ export const detectProblems = (apiResponses: APIResponse[]): Problem[] => {
       }
 
       problems.push({
-        id: response.id,
+        id: problemId++,
         type,
         severity,
         endpoint: response.endpoint,
