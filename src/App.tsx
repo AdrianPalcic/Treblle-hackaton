@@ -6,14 +6,20 @@ import { useEffect, useState } from "react";
 import TableView from "./components/TableView";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
-import type { APIResponse } from "./types";
+import type { APIResponse, Problem } from "./types";
 import Spinner from "./components/Spinner";
+import ProblemsListView from "./components/ProblemsListView";
+import ProblemsTableView from "./components/ProblemsTableView";
+import { detectProblems } from "./utils";
 
 function App() {
+  // Main view mode: "requests" or "problems"
+  const [viewMode, setViewMode] = useState<"requests" | "problems">("requests");
+
   // View states
   const [view, setView] = useState("List");
 
-  // Sorting states
+  // Sorting states for requests
   const [selectedTime, setSelectedTime] = useState("Last 24h");
   const [selectedMethod, setSelectedMethod] = useState("All");
   const [selectedResponse, setSelectedResponse] = useState("All");
@@ -28,16 +34,28 @@ function App() {
     "fastest" | "slowest"
   >("fastest");
 
+  // Problem-specific filters and sorting
+  const [selectedProblemType, setSelectedProblemType] = useState("All");
+  const [selectedSeverity, setSelectedSeverity] = useState("All");
+  const [activeProblemSort, setActiveProblemSort] = useState<
+    "createdAt" | "responseTime" | "severity"
+  >("severity");
+
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApiCall, setSelectedApiCall] = useState<APIResponse | null>(
     null
   );
+  const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
 
   // API state
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [responses, setResponses] = useState<APIResponse[]>([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
 
   //Need theeeese
   const baseURL = "https://jsonplaceholder.typicode.com";
@@ -127,8 +145,13 @@ function App() {
       }
 
       setResponses(allResponses);
+      
+      // Detect problems from API responses
+      const detectedProblems = detectProblems(allResponses);
+      setProblems(detectedProblems);
 
       console.log("All API responses:", allResponses);
+      console.log("Detected problems:", detectedProblems);
     } catch (error) {
       console.error("Error in API call:", error);
       setErrorMessage(
@@ -152,6 +175,8 @@ function App() {
       {!isLoading ? (
         <>
           <RequestBar
+            viewMode={viewMode}
+            setViewMode={setViewMode}
             view={view}
             setView={setView}
             selectedTime={selectedTime}
@@ -166,33 +191,94 @@ function App() {
             setSortByCreatedAt={setSortByCreatedAt}
             sortByResponseTime={sortByResponseTime}
             setSortByResponseTime={setSortByResponseTime}
+            selectedProblemType={selectedProblemType}
+            setSelectedProblemType={setSelectedProblemType}
+            selectedSeverity={selectedSeverity}
+            setSelectedSeverity={setSelectedSeverity}
+            activeProblemSort={activeProblemSort}
+            setActiveProblemSort={setActiveProblemSort}
+            problemsCount={problems.length}
           />
-          {view === "List" ? (
-            <ListView
-              responses={responses}
+          {viewMode === "requests" ? (
+            view === "List" ? (
+              <ListView
+                responses={responses}
+                selectedTime={selectedTime}
+                selectedMethod={selectedMethod}
+                selectedResponse={selectedResponse}
+                activeSort={activeSort}
+                sortByCreatedAt={sortByCreatedAt}
+                sortByResponseTime={sortByResponseTime}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+                onApiCallClick={(call) => {
+                  setSelectedApiCall(call);
+                  setIsModalOpen(true);
+                }}
+              />
+            ) : (
+              <TableView
+                responses={responses}
+                selectedTime={selectedTime}
+                selectedMethod={selectedMethod}
+                selectedResponse={selectedResponse}
+                activeSort={activeSort}
+                sortByCreatedAt={sortByCreatedAt}
+                sortByResponseTime={sortByResponseTime}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+                onApiCallClick={(call) => {
+                  setSelectedApiCall(call);
+                  setIsModalOpen(true);
+                }}
+              />
+            )
+          ) : view === "List" ? (
+            <ProblemsListView
+              problems={problems}
               selectedTime={selectedTime}
+              selectedType={selectedProblemType}
+              selectedSeverity={selectedSeverity}
               selectedMethod={selectedMethod}
-              selectedResponse={selectedResponse}
-              activeSort={activeSort}
+              activeSort={activeProblemSort}
               sortByCreatedAt={sortByCreatedAt}
               sortByResponseTime={sortByResponseTime}
-              onApiCallClick={(call) => {
-                setSelectedApiCall(call);
-                setIsModalOpen(true);
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              onProblemClick={(problem) => {
+                // Find the original API call
+                const originalCall = responses.find(
+                  (r) => r.id === problem.originalCallId
+                );
+                if (originalCall) {
+                  setSelectedApiCall(originalCall);
+                  setSelectedProblem(problem);
+                  setIsModalOpen(true);
+                }
               }}
             />
           ) : (
-            <TableView
-              responses={responses}
+            <ProblemsTableView
+              problems={problems}
               selectedTime={selectedTime}
+              selectedType={selectedProblemType}
+              selectedSeverity={selectedSeverity}
               selectedMethod={selectedMethod}
-              selectedResponse={selectedResponse}
-              activeSort={activeSort}
+              activeSort={activeProblemSort}
               sortByCreatedAt={sortByCreatedAt}
               sortByResponseTime={sortByResponseTime}
-              onApiCallClick={(call) => {
-                setSelectedApiCall(call);
-                setIsModalOpen(true);
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              onProblemClick={(problem) => {
+                // Find the original API call
+                const originalCall = responses.find(
+                  (r) => r.id === problem.originalCallId
+                );
+                if (originalCall) {
+                  setSelectedApiCall(originalCall);
+                  setSelectedProblem(problem);
+                  setIsModalOpen(true);
+                }
               }}
             />
           )}
@@ -204,8 +290,12 @@ function App() {
       )}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedProblem(null);
+        }}
         apiCall={selectedApiCall}
+        problem={selectedProblem}
       />
       <Footer />
     </main>

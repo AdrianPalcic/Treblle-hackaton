@@ -1,14 +1,15 @@
-import { X, Copy, Check } from "lucide-react";
+import { X, Copy, Check, AlertTriangle } from "lucide-react";
 import { useState } from "react";
-import type { APIResponse } from "../types";
+import type { APIResponse, Problem } from "../types";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   apiCall: APIResponse | null;
+  problem?: Problem | null;
 }
 
-const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
+const Modal = ({ isOpen, onClose, apiCall, problem }: ModalProps) => {
   const [copied, setCopied] = useState(false);
 
   if (!isOpen || !apiCall) return null;
@@ -68,6 +69,29 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
       />
 
       <div className="relative w-full max-w-3xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto glass rounded-2xl md:rounded-3xl p-4 md:p-6">
+        {problem && (
+          <div className="mb-4 p-3 md:p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="text-red-400 mt-0.5 flex-shrink-0" size={20} />
+              <div>
+                <h3 className="text-red-400 font-semibold text-sm md:text-base mb-1">
+                  Problem Detected
+                </h3>
+                <p className="text-white/80 text-xs md:text-sm mb-2">
+                  {problem.errorMessage}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-semibold">
+                    {problem.type.toUpperCase()}
+                  </span>
+                  <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs font-semibold">
+                    SEVERITY: {problem.severity.toUpperCase()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex justify-between items-start mb-4 md:mb-6">
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-1 md:mb-2">

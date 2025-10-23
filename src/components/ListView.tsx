@@ -2,6 +2,9 @@ import { Clock, MapPin, Zap } from "lucide-react";
 import type { APIResponse } from "../types";
 import Chart from "./Chart";
 import { getTimeDifference } from "../utils";
+import Pagination from "./Pagination";
+
+const ITEMS_PER_PAGE = 5;
 
 const ListView = ({
   responses,
@@ -11,6 +14,8 @@ const ListView = ({
   activeSort,
   sortByCreatedAt,
   sortByResponseTime,
+  currentPage,
+  onPageChange,
   onApiCallClick,
 }: {
   responses: APIResponse[];
@@ -20,6 +25,8 @@ const ListView = ({
   activeSort: "createdAt" | "responseTime";
   sortByCreatedAt: "latest" | "oldest";
   sortByResponseTime: "fastest" | "slowest";
+  currentPage: number;
+  onPageChange: (page: number) => void;
   onApiCallClick: (call: APIResponse) => void;
 }) => {
   const filterByTime = (call: APIResponse) => {
@@ -58,7 +65,7 @@ const ListView = ({
       filterByTime(call) && filterByMethod(call) && filterByResponse(call)
   );
 
-  const apiCalls = [...filteredCalls].sort((a, b) => {
+  const sortedCalls = [...filteredCalls].sort((a, b) => {
     if (activeSort === "createdAt") {
       const aTime = new Date(a.createdAt).getTime();
       const bTime = new Date(b.createdAt).getTime();
@@ -74,6 +81,12 @@ const ListView = ({
       return sortByResponseTime === "fastest" ? aTime - bTime : bTime - aTime;
     }
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(sortedCalls.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const apiCalls = sortedCalls.slice(startIndex, endIndex);
 
   const getMethodColor = (method: string) => {
     const colors: { [key: string]: string } = {
@@ -97,7 +110,7 @@ const ListView = ({
   return (
     <section className="max-w-6xl mx-auto px-4">
       <div className="glass p-2 md:p-3">
-        <div id="requests" className="flex flex-col gap-2 w-full">
+        <div id="requests" className="flex flex-col gap-2 w-full mb-2">
           {apiCalls.length < 1 ? (
             <div className="py-8 md:py-12 px-4 w-full text-center">
               <p className="text-lg md:text-xl text-white/60 font-light">
@@ -173,6 +186,11 @@ const ListView = ({
             ))
           )}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
       </div>
     </section>
   );

@@ -1,6 +1,9 @@
 import { Clock, MapPin, Zap } from "lucide-react";
 import type { APIResponse } from "../types";
 import { getTimeDifference } from "../utils";
+import Pagination from "./Pagination";
+
+const ITEMS_PER_PAGE = 5;
 
 const TableView = ({
   responses,
@@ -10,6 +13,8 @@ const TableView = ({
   activeSort,
   sortByCreatedAt,
   sortByResponseTime,
+  currentPage,
+  onPageChange,
   onApiCallClick,
 }: {
   responses: APIResponse[];
@@ -19,6 +24,8 @@ const TableView = ({
   activeSort: "createdAt" | "responseTime";
   sortByCreatedAt: "latest" | "oldest";
   sortByResponseTime: "fastest" | "slowest";
+  currentPage: number;
+  onPageChange: (page: number) => void;
   onApiCallClick: (call: APIResponse) => void;
 }) => {
   const filterByTime = (call: APIResponse) => {
@@ -57,7 +64,7 @@ const TableView = ({
       filterByTime(call) && filterByMethod(call) && filterByResponse(call)
   );
 
-  const apiCalls = [...filteredCalls].sort((a, b) => {
+  const sortedCalls = [...filteredCalls].sort((a, b) => {
     if (activeSort === "createdAt") {
       const aTime = new Date(a.createdAt).getTime();
       const bTime = new Date(b.createdAt).getTime();
@@ -73,6 +80,12 @@ const TableView = ({
       return sortByResponseTime === "fastest" ? aTime - bTime : bTime - aTime;
     }
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(sortedCalls.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const apiCalls = sortedCalls.slice(startIndex, endIndex);
 
   const getMethodColor = (method: string) => {
     const colors: { [key: string]: string } = {
@@ -96,7 +109,7 @@ const TableView = ({
   return (
     <section className="max-w-6xl mx-auto px-4">
       <div className="glass p-2 md:p-3">
-        <div className="overflow-x-auto bg-tetriary rounded-2xl -mx-2 md:mx-0">
+        <div className="overflow-x-auto bg-tetriary rounded-2xl -mx-2 md:mx-0 mb-2">
           <table className="w-full min-w-[600px]">
             <thead>
               <tr className="border-b border-white/20">
@@ -199,6 +212,11 @@ const TableView = ({
             </tbody>
           </table>
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
       </div>
     </section>
   );

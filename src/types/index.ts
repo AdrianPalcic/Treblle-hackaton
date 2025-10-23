@@ -83,3 +83,20 @@ export type ChartData = {
   avgTime: number;
   id: number;
 };
+
+export type ProblemType = "error" | "slow" | "critical";
+export type ProblemSeverity = "high" | "medium" | "low";
+
+export type Problem = {
+  id: number;
+  type: ProblemType;
+  severity: ProblemSeverity;
+  endpoint: string;
+  method: string;
+  status: number;
+  responseTime: string;
+  errorMessage?: string;
+  createdAt: string;
+  location: string;
+  originalCallId: number;
+};
