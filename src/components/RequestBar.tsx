@@ -4,14 +4,23 @@ import { useState, useRef, useEffect } from "react";
 const RequestBar = ({
   view,
   setView,
+  selectedTime,
+  setSelectedTime,
+  selectedMethod,
+  setSelectedMethod,
+  selectedResponse,
+  setSelectedResponse,
 }: {
   view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
+  selectedTime: string;
+  setSelectedTime: React.Dispatch<React.SetStateAction<string>>;
+  selectedMethod: string;
+  setSelectedMethod: React.Dispatch<React.SetStateAction<string>>;
+  selectedResponse: string;
+  setSelectedResponse: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [selectedTime, setSelectedTime] = useState("Last 24h");
-  const [selectedMethod, setSelectedMethod] = useState("All");
-  const [selectedResponse, setSelectedResponse] = useState("All");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 

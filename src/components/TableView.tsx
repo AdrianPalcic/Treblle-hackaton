@@ -1,7 +1,15 @@
 import { Clock, MapPin, Zap } from "lucide-react";
 
-const TableView = () => {
-  const apiCalls = [
+const TableView = ({
+  selectedTime,
+  selectedMethod,
+  selectedResponse,
+}: {
+  selectedTime: string;
+  selectedMethod: string;
+  selectedResponse: string;
+}) => {
+  const allApiCalls = [
     {
       id: 1,
       method: "GET",
@@ -9,7 +17,8 @@ const TableView = () => {
       endpoint: "auth/register",
       responseTime: "25.26ms",
       location: "Senj, Croatia",
-      timestamp: "2:34 PM",
+      timestamp: "30 min ago",
+      hoursAgo: 0.5,
     },
     {
       id: 2,
@@ -18,16 +27,18 @@ const TableView = () => {
       endpoint: "api/users",
       responseTime: "34.12ms",
       location: "Zagreb, Croatia",
-      timestamp: "2:35 PM",
+      timestamp: "45 min ago",
+      hoursAgo: 0.75,
     },
     {
       id: 3,
       method: "GET",
-      status: 200,
-      endpoint: "api/products",
+      status: 404,
+      endpoint: "api/products/999",
       responseTime: "18.45ms",
       location: "Split, Croatia",
-      timestamp: "2:36 PM",
+      timestamp: "3 hours ago",
+      hoursAgo: 3,
     },
     {
       id: 4,
@@ -36,7 +47,8 @@ const TableView = () => {
       endpoint: "api/users/123",
       responseTime: "42.78ms",
       location: "Rijeka, Croatia",
-      timestamp: "2:37 PM",
+      timestamp: "5 hours ago",
+      hoursAgo: 5,
     },
     {
       id: 5,
@@ -45,9 +57,105 @@ const TableView = () => {
       endpoint: "api/products/456",
       responseTime: "21.33ms",
       location: "Osijek, Croatia",
-      timestamp: "2:38 PM",
+      timestamp: "12 hours ago",
+      hoursAgo: 12,
+    },
+    {
+      id: 6,
+      method: "PATCH",
+      status: 200,
+      endpoint: "api/users/profile",
+      responseTime: "28.91ms",
+      location: "Dubrovnik, Croatia",
+      timestamp: "18 hours ago",
+      hoursAgo: 18,
+    },
+    {
+      id: 7,
+      method: "POST",
+      status: 500,
+      endpoint: "api/payments",
+      responseTime: "156.42ms",
+      location: "Zadar, Croatia",
+      timestamp: "20 hours ago",
+      hoursAgo: 20,
+    },
+    {
+      id: 8,
+      method: "GET",
+      status: 301,
+      endpoint: "api/redirect",
+      responseTime: "12.15ms",
+      location: "Pula, Croatia",
+      timestamp: "3 days ago",
+      hoursAgo: 72,
+    },
+    {
+      id: 9,
+      method: "DELETE",
+      status: 401,
+      endpoint: "api/admin/users",
+      responseTime: "8.22ms",
+      location: "Varaždin, Croatia",
+      timestamp: "5 days ago",
+      hoursAgo: 120,
+    },
+    {
+      id: 10,
+      method: "POST",
+      status: 422,
+      endpoint: "api/validation",
+      responseTime: "45.67ms",
+      location: "Karlovac, Croatia",
+      timestamp: "15 days ago",
+      hoursAgo: 360,
+    },
+    {
+      id: 11,
+      method: "GET",
+      status: 200,
+      endpoint: "api/analytics",
+      responseTime: "89.34ms",
+      location: "Šibenik, Croatia",
+      timestamp: "25 days ago",
+      hoursAgo: 600,
     },
   ];
+
+  const filterByTime = (call: (typeof allApiCalls)[0]) => {
+    const timeFilters: { [key: string]: number } = {
+      "Last hour": 1,
+      "Last 6 hours": 6,
+      "Last 24h": 24,
+      "Last 7 days": 168,
+      "Last 30 days": 720,
+    };
+    const maxHours = timeFilters[selectedTime];
+    return maxHours ? call.hoursAgo <= maxHours : true;
+  };
+
+  const filterByMethod = (call: (typeof allApiCalls)[0]) => {
+    if (selectedMethod === "All") return true;
+    return call.method === selectedMethod;
+  };
+
+  const filterByResponse = (call: (typeof allApiCalls)[0]) => {
+    if (selectedResponse === "All") return true;
+    if (selectedResponse === "2xx Success")
+      return call.status >= 200 && call.status < 300;
+    if (selectedResponse === "3xx Redirect")
+      return call.status >= 300 && call.status < 400;
+    if (selectedResponse === "4xx Client Error")
+      return call.status >= 400 && call.status < 500;
+    if (selectedResponse === "5xx Server Error")
+      return call.status >= 500 && call.status < 600;
+    return true;
+  };
+
+  const apiCalls = allApiCalls.filter(
+    (call) =>
+      filterByTime(call) && filterByMethod(call) && filterByResponse(call)
+  );
 
   const getMethodColor = (method: string) => {
     const colors: { [key: string]: string } = {
@@ -96,50 +204,63 @@ const TableView = () => {
               </tr>
             </thead>
             <tbody>
-              {apiCalls.map((call) => (
-                <tr
-                  key={call.id}
-                  className="border-b border-white/10 hover:bg-white/5 transition-colors"
-                >
-                  <td className="py-4 px-4">
-                    <div
-                      className={`method py-1 px-3 rounded-full text-[14px] font-semibold w-fit ${getMethodColor(
-                        call.method
-                      )}`}
-                    >
-                      {call.method}
-                    </div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <div
-                      className={`response py-1 px-3 rounded-full text-[14px] font-semibold w-fit ${getStatusColor(
-                        call.status
-                      )}`}
-                    >
-                      {call.status}
-                    </div>
-                  </td>
-                  <td className="py-4 px-4 text-white/90">{call.endpoint}</td>
-                  <td className="py-4 px-4">
-                    <span className="flex gap-1 items-center font-extralight text-[14px]">
-                      <Zap size={18} className="text-white/60" />
-                      {call.responseTime}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4">
-                    <span className="flex gap-1 items-center font-extralight text-[14px]">
-                      <MapPin size={18} className="text-white/60" />
-                      {call.location}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4">
-                    <span className="flex gap-1 items-center font-extralight text-[14px]">
-                      <Clock size={18} className="text-white/60" />
-                      {call.timestamp}
-                    </span>
+              {apiCalls.length < 1 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 px-4 text-center">
+                    <p className="text-xl text-white/60 font-light">
+                      No requests match your filters
+                    </p>
+                    <p className="text-sm text-white/40 mt-2">
+                      Try adjusting your filter parameters
+                    </p>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                apiCalls.map((call) => (
+                  <tr
+                    key={call.id}
+                    className="border-b border-white/10 hover:bg-white/5 transition-colors"
+                  >
+                    <td className="py-4 px-4">
+                      <div
+                        className={`method py-1 px-3 rounded-full text-[14px] font-semibold w-fit ${getMethodColor(
+                          call.method
+                        )}`}
+                      >
+                        {call.method}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4">
+                      <div
+                        className={`response py-1 px-3 rounded-full text-[14px] font-semibold w-fit ${getStatusColor(
+                          call.status
+                        )}`}
+                      >
+                        {call.status}
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 text-white/90">{call.endpoint}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex gap-1 items-center font-extralight text-[14px]">
+                        <Zap size={18} className="text-white/60" />
+                        {call.responseTime}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="flex gap-1 items-center font-extralight text-[14px]">
+                        <MapPin size={18} className="text-white/60" />
+                        {call.location}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className="flex gap-1 items-center font-extralight text-[14px]">
+                        <Clock size={18} className="text-white/60" />
+                        {call.timestamp}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
