@@ -1,25 +1,36 @@
+import { ChevronsUpDown } from "lucide-react";
+import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <main>
       <Navbar />
-      <section id="hero">
-        <div className="max-w-6xl flex flex-col h-[70vh] mx-auto justify-center">
-          <div className="glass w-fit mx-auto p-2 rounded-full text-[14px] border-0!">
-            <span className="py-1 px-2 bg-primary rounded-full">New</span> Live
-            Performance Boosts
+      <Hero />
+      <section className="max-w-6xl mx-auto">
+        <div className="bar w-full glass px-4 py-2 rounded-full">
+          <div className="flex items-center justify-between">
+            <h3>Requests </h3>
+            <div className="flex gap-4 items-center">
+              <div className="view flex items-center  p-1 rounded-full glass">
+                <span className="cursor-pointer py-1 px-4 bg-black rounded-full">
+                  List
+                </span>
+                <span className="cursor-pointer py-1 px-4 bg-black rounded-full">
+                  Table
+                </span>
+              </div>
+              <div className="tag flex items-center gap-1 py-2 px-4 bg-fourth .tag rounded-full">
+                Last 24h <ChevronsUpDown size={20} />
+              </div>
+              <div className="tag flex items-center gap-1 py-2 px-4 bg-fourth .tag rounded-full">
+                Method: All <ChevronsUpDown size={20} />
+              </div>
+              <div className="tag flex items-center gap-1 py-2 px-4 bg-fourth .tag rounded-full">
+                Response: All <ChevronsUpDown size={20} />
+              </div>
+            </div>
           </div>
-          <h1 className="hero-heading text-5xl text-center font-michroma font-light tracking-widest leading-[1.6] my-2">
-            Smarter API Performance <br /> Real-Time Insights
-          </h1>
-          <p className="text-center text-xl font-extralight">
-            RunTime AI monitors, analyzes, and optimizes your API's so you can
-            focus on building - not debugging
-          </p>
-          <button className="w-fit glass py-3 px-4 rounded-full mx-auto mt-4 text-[18px] font-light">
-            Start Monitoring Now
-          </button>
         </div>
       </section>
     </main>

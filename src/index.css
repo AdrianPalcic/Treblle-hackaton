@@ -21,15 +21,28 @@
     line-height: 1.6;
   }
 }
-@layer components {
-}
 .glass {
   background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5.6px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
 }
+@layer components {
+  .button {
+    @apply py-3 px-4 bg-primary border border-solid border-primary-light rounded-full text-[14px] tracking-wider;
+  }
+  .button-secondary {
+    @apply w-fit  py-3 px-4 rounded-full mx-auto mt-4 text-[18px] font-light;
+  }
+}
+
 .hero-heading {
   font-family: "Michroma", sans-serif;
+}
+
+.tag {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0px 0px 6px var(--color-tetriary);
 }
