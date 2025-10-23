@@ -1,5 +1,6 @@
 import { Clock, MapPin, Zap } from "lucide-react";
 import type { APIResponse } from "../types";
+import Chart from "./Chart";
 
 const ListView = ({
   responses,
@@ -9,6 +10,7 @@ const ListView = ({
   activeSort,
   sortByCreatedAt,
   sortByResponseTime,
+  avgTime,
   onApiCallClick,
 }: {
   responses: APIResponse[];
@@ -18,6 +20,7 @@ const ListView = ({
   activeSort: "createdAt" | "responseTime";
   sortByCreatedAt: "latest" | "oldest";
   sortByResponseTime: "fastest" | "slowest";
+  avgTime: number;
   onApiCallClick: (call: APIResponse) => void;
 }) => {
   const filterByTime = (call: APIResponse) => {
@@ -39,13 +42,13 @@ const ListView = ({
 
   const filterByResponse = (call: APIResponse) => {
     if (selectedResponse === "All") return true;
-    if (selectedResponse === "Success")
+    if (selectedResponse === "2xx Success")
       return call.status >= 200 && call.status < 300;
-    if (selectedResponse === "Redirect")
+    if (selectedResponse === "3xx Redirect")
       return call.status >= 300 && call.status < 400;
-    if (selectedResponse === "Client Error")
+    if (selectedResponse === "4xx Client Error")
       return call.status >= 400 && call.status < 500;
-    if (selectedResponse === "Server Error")
+    if (selectedResponse === "5xx Server Error")
       return call.status >= 500 && call.status < 600;
     return true;
   };
@@ -128,7 +131,7 @@ const ListView = ({
                         {call.status}
                       </div>
                       <span className="text-sm md:text-base truncate">
-                        {call.endpoint}
+                        api/{call.endpoint}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2 md:gap-3 items-center">
@@ -161,7 +164,9 @@ const ListView = ({
                     </div>
                   </div>
                 </div>
-                <div className="hidden md:block flex-1 border border-solid border-white"></div>
+                <div className="hidden md:block flex-1">
+                  <Chart />
+                </div>
               </div>
             ))
           )}

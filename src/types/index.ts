@@ -77,3 +77,9 @@ export type APIResponse = {
   error?: string;
   responseHeaders?: Record<string, string>;
 };
+
+export type ChartData = {
+  responseTime: number;
+  avgTime: number;
+  id: number;
+};

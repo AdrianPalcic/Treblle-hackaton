@@ -157,7 +157,7 @@ const RequestBar = ({
                 <ChevronsUpDown size={20} className="hidden md:block" />
               </div>
               {openDropdown === "method" && (
-                <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-[1000]">
+                <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-1000">
                   {methodOptions.map((option) => (
                     <div
                       key={option.value}

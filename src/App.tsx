@@ -164,6 +164,9 @@ function App() {
     <main>
       <Navbar />
       <Hero />
+      {errorMessage && (
+        <div className="flex justify-center">{errorMessage}</div>
+      )}
       {!isLoading ? (
         <>
           <RequestBar
@@ -195,6 +198,7 @@ function App() {
                 setSelectedApiCall(call);
                 setIsModalOpen(true);
               }}
+              avgTime={averageTime}
             />
           ) : (
             <TableView
