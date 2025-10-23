@@ -39,23 +39,11 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [responses, setResponses] = useState<APIResponse[]>([]);
-  const [averageTime, setAverageTime] = useState<number>(0);
 
   //Need theeeese
   const baseURL = "https://jsonplaceholder.typicode.com";
   const endpoints = ["todos", "users", "albums", "posts"];
   const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
-
-  const calculateAverageResponseTime = (apiResponses: APIResponse[]) => {
-    if (apiResponses.length === 0) return 0;
-
-    const totalTime = apiResponses.reduce((sum, response) => {
-      const timeValue = parseFloat(response.responseTime.replace("ms", ""));
-      return sum + timeValue;
-    }, 0);
-
-    return totalTime / apiResponses.length;
-  };
 
   //God help me
   const callAPI = async () => {
@@ -142,11 +130,8 @@ function App() {
       }
 
       setResponses(allResponses);
-      const avgTime = calculateAverageResponseTime(allResponses);
-      setAverageTime(avgTime);
 
       console.log("All API responses:", allResponses);
-      console.log("Average response time:", avgTime.toFixed(2) + "ms");
     } catch (error) {
       console.error("Error in API call:", error);
       setErrorMessage(
@@ -198,7 +183,6 @@ function App() {
                 setSelectedApiCall(call);
                 setIsModalOpen(true);
               }}
-              avgTime={averageTime}
             />
           ) : (
             <TableView

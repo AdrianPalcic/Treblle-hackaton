@@ -154,7 +154,7 @@ const TableView = ({
                       </div>
                     </td>
                     <td className="py-3 md:py-4 px-2 md:px-4 text-white/90 text-xs md:text-sm">
-                      {call.endpoint}
+                      api/{call.endpoint}
                     </td>
                     <td className="py-3 md:py-4 px-2 md:px-4">
                       <span className="flex gap-1 items-center font-extralight text-[11px] md:text-[14px]">

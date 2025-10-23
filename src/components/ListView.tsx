@@ -10,7 +10,6 @@ const ListView = ({
   activeSort,
   sortByCreatedAt,
   sortByResponseTime,
-  avgTime,
   onApiCallClick,
 }: {
   responses: APIResponse[];
@@ -20,7 +19,6 @@ const ListView = ({
   activeSort: "createdAt" | "responseTime";
   sortByCreatedAt: "latest" | "oldest";
   sortByResponseTime: "fastest" | "slowest";
-  avgTime: number;
   onApiCallClick: (call: APIResponse) => void;
 }) => {
   const filterByTime = (call: APIResponse) => {
