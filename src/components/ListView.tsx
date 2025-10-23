@@ -76,7 +76,7 @@ const ListView = () => {
             <div
               key={call.id}
               id="request"
-              className="py-4 px-2 w-full bg-tetriary rounded-2xl request-border flex justify-between items-center gap-4"
+              className="py-4 px-2 w-full bg-tetriary/30 rounded-2xl request-border flex justify-between items-center gap-4 hover:bg-white/5 cursor-pointer"
             >
               <div className="flex-1 ">
                 <div className="flex flex-col gap-1">

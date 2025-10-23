@@ -70,8 +70,8 @@ const TableView = () => {
 
   return (
     <section className="max-w-6xl mx-auto ">
-      <div className="glass p-6 ">
-        <div className="overflow-x-auto">
+      <div className="glass p-3 ">
+        <div className="overflow-x-auto bg-tetriary rounded-2xl">
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/20">

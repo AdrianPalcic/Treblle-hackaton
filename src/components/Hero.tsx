@@ -1,4 +1,3 @@
-import React from "react";
 
 const Hero = () => {
   return (
@@ -15,7 +14,9 @@ const Hero = () => {
           RunTime AI monitors, analyzes, and optimizes your API's so you can
           focus on building - not debugging
         </p>
-        <button className="button-secondary glass">Start Monitoring Now</button>
+        <button className="button-secondary glass transition-all duration-300 hover:bg-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.3),0_0_60px_rgba(255,255,255,0.15)] hover:scale-105">
+          Start Monitoring Now
+        </button>
       </div>
     </section>
   );
