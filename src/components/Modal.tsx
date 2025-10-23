@@ -105,11 +105,11 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
 
         <div className="mb-4 md:mb-6">
           <label className="text-xs md:text-sm text-white/60 mb-2 block">
-            Endpoint
+            Full URL
           </label>
           <div className="flex gap-2 items-center">
             <div className="flex-1 bg-tetriary/50 rounded-xl p-2 md:p-3 font-mono text-xs md:text-sm break-all">
-              https://api.example.com/{apiCall.endpoint}
+              https://jsonplaceholder.typicode.com/{apiCall.endpoint}
             </div>
             <button
               onClick={copyEndpoint}
@@ -130,7 +130,6 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
           </div>
         </div>
 
-        {/* Info Grid */}
         <div className="grid grid-cols-2 gap-2 md:gap-4 mb-4 md:mb-6">
           <div className="bg-tetriary/30 rounded-xl p-3 md:p-4">
             <label className="text-xs md:text-sm text-white/60 mb-1 block">
@@ -150,7 +149,6 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
           </div>
         </div>
 
-        {/* Response Headers */}
         <div className="mb-4 md:mb-6">
           <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
             Response Headers
@@ -178,7 +176,6 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
           </div>
         </div>
 
-        {/* Response Body */}
         <div className="mb-2 md:mb-4">
           <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
             Response Body
