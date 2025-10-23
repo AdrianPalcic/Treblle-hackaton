@@ -78,13 +78,11 @@ const ProblemsListView = ({
       const bTime = parseResponseTime(b.responseTime);
       return sortByResponseTime === "fastest" ? aTime - bTime : bTime - aTime;
     } else {
-      // Sort by severity
       const severityOrder = { high: 3, medium: 2, low: 1 };
       return severityOrder[b.severity] - severityOrder[a.severity];
     }
   });
 
-  // Pagination logic
   const totalPages = Math.ceil(sortedProblems.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;

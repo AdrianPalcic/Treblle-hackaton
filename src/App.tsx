@@ -13,13 +13,8 @@ import ProblemsTableView from "./components/ProblemsTableView";
 import { detectProblems } from "./utils";
 
 function App() {
-  // Main view mode: "requests" or "problems"
   const [viewMode, setViewMode] = useState<"requests" | "problems">("requests");
-
-  // View states
   const [view, setView] = useState("List");
-
-  // Sorting states for requests
   const [selectedTime, setSelectedTime] = useState("Last 24h");
   const [selectedMethod, setSelectedMethod] = useState("All");
   const [selectedResponse, setSelectedResponse] = useState("All");
@@ -34,35 +29,29 @@ function App() {
     "fastest" | "slowest"
   >("fastest");
 
-  // Problem-specific filters and sorting
   const [selectedProblemType, setSelectedProblemType] = useState("All");
   const [selectedSeverity, setSelectedSeverity] = useState("All");
   const [activeProblemSort, setActiveProblemSort] = useState<
     "createdAt" | "responseTime" | "severity"
   >("severity");
 
-  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApiCall, setSelectedApiCall] = useState<APIResponse | null>(
     null
   );
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
 
-  // API state
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [responses, setResponses] = useState<APIResponse[]>([]);
   const [problems, setProblems] = useState<Problem[]>([]);
 
-  //Need theeeese
   const baseURL = "https://jsonplaceholder.typicode.com";
   const endpoints = ["todos", "users", "albums", "posts"];
   const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
-  //God help me
   const callAPI = async () => {
     setIsLoading(true);
     setErrorMessage("");
@@ -146,7 +135,6 @@ function App() {
 
       setResponses(allResponses);
       
-      // Detect problems from API responses
       const detectedProblems = detectProblems(allResponses);
       setProblems(detectedProblems);
 
@@ -246,7 +234,6 @@ function App() {
               currentPage={currentPage}
               onPageChange={setCurrentPage}
               onProblemClick={(problem) => {
-                // Find the original API call
                 const originalCall = responses.find(
                   (r) => r.id === problem.originalCallId
                 );
@@ -270,7 +257,6 @@ function App() {
               currentPage={currentPage}
               onPageChange={setCurrentPage}
               onProblemClick={(problem) => {
-                // Find the original API call
                 const originalCall = responses.find(
                   (r) => r.id === problem.originalCallId
                 );

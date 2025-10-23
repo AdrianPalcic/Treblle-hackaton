@@ -1,4 +1,9 @@
-import type { APIResponse, Problem, ProblemType, ProblemSeverity } from '../types'
+import type {
+  APIResponse,
+  Problem,
+  ProblemType,
+  ProblemSeverity,
+} from "../types";
 export const getTimeDifference = (timestamp: string) => {
   const now = new Date();
   const then = new Date(timestamp);
@@ -21,8 +26,8 @@ export const getTimeDifference = (timestamp: string) => {
 
 export const detectProblems = (apiResponses: APIResponse[]): Problem[] => {
   const problems: Problem[] = [];
-  const SLOW_THRESHOLD = 1000; // ms
-  const VERY_SLOW_THRESHOLD = 2000; // ms
+  const SLOW_THRESHOLD = 1000;
+  const VERY_SLOW_THRESHOLD = 2000;
 
   apiResponses.forEach((response) => {
     const responseTimeMs = parseFloat(response.responseTime.replace("ms", ""));
@@ -35,17 +40,19 @@ export const detectProblems = (apiResponses: APIResponse[]): Problem[] => {
       let severity: ProblemSeverity;
       let errorMessage: string | undefined;
 
-      // Determine type and severity
       if (isError && isVerySlow) {
         type = "critical";
         severity = "high";
-        errorMessage = `${response.status >= 500 ? "Server" : "Client"} error with very slow response`;
+        errorMessage = `${
+          response.status >= 500 ? "Server" : "Client"
+        } error with very slow response`;
       } else if (isError) {
         type = "error";
         severity = response.status >= 500 ? "high" : "medium";
-        errorMessage = response.status >= 500 
-          ? "Server error - endpoint may be down"
-          : "Client error - check request parameters";
+        errorMessage =
+          response.status >= 500
+            ? "Server error - endpoint may be down"
+            : "Client error - check request parameters";
       } else if (isVerySlow) {
         type = "slow";
         severity = "high";
