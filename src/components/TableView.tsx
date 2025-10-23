@@ -1,7 +1,8 @@
 import { Clock, MapPin, Zap } from "lucide-react";
-import type { APICall } from "../types";
+import type { APIResponse } from "../types";
 
 const TableView = ({
+  responses,
   selectedTime,
   selectedMethod,
   selectedResponse,
@@ -10,128 +11,16 @@ const TableView = ({
   sortByResponseTime,
   onApiCallClick,
 }: {
+  responses: APIResponse[];
   selectedTime: string;
   selectedMethod: string;
   selectedResponse: string;
   activeSort: "createdAt" | "responseTime";
   sortByCreatedAt: "latest" | "oldest";
   sortByResponseTime: "fastest" | "slowest";
-  onApiCallClick: (call: APICall) => void;
+  onApiCallClick: (call: APIResponse) => void;
 }) => {
-  const allApiCalls = [
-    {
-      id: 1,
-      method: "GET",
-      status: 200,
-      endpoint: "auth/register",
-      responseTime: "25.26ms",
-      location: "Senj, Croatia",
-      timestamp: "30 min ago",
-      hoursAgo: 0.5,
-    },
-    {
-      id: 2,
-      method: "POST",
-      status: 201,
-      endpoint: "api/users",
-      responseTime: "34.12ms",
-      location: "Zagreb, Croatia",
-      timestamp: "45 min ago",
-      hoursAgo: 0.75,
-    },
-    {
-      id: 3,
-      method: "GET",
-      status: 404,
-      endpoint: "api/products/999",
-      responseTime: "18.45ms",
-      location: "Split, Croatia",
-      timestamp: "3 hours ago",
-      hoursAgo: 3,
-    },
-    {
-      id: 4,
-      method: "PUT",
-      status: 200,
-      endpoint: "api/users/123",
-      responseTime: "42.78ms",
-      location: "Rijeka, Croatia",
-      timestamp: "5 hours ago",
-      hoursAgo: 5,
-    },
-    {
-      id: 5,
-      method: "DELETE",
-      status: 204,
-      endpoint: "api/products/456",
-      responseTime: "21.33ms",
-      location: "Osijek, Croatia",
-      timestamp: "12 hours ago",
-      hoursAgo: 12,
-    },
-    {
-      id: 6,
-      method: "PATCH",
-      status: 200,
-      endpoint: "api/users/profile",
-      responseTime: "28.91ms",
-      location: "Dubrovnik, Croatia",
-      timestamp: "18 hours ago",
-      hoursAgo: 18,
-    },
-    {
-      id: 7,
-      method: "POST",
-      status: 500,
-      endpoint: "api/payments",
-      responseTime: "156.42ms",
-      location: "Zadar, Croatia",
-      timestamp: "20 hours ago",
-      hoursAgo: 20,
-    },
-    {
-      id: 8,
-      method: "GET",
-      status: 301,
-      endpoint: "api/redirect",
-      responseTime: "12.15ms",
-      location: "Pula, Croatia",
-      timestamp: "3 days ago",
-      hoursAgo: 72,
-    },
-    {
-      id: 9,
-      method: "DELETE",
-      status: 401,
-      endpoint: "api/admin/users",
-      responseTime: "8.22ms",
-      location: "Varaždin, Croatia",
-      timestamp: "5 days ago",
-      hoursAgo: 120,
-    },
-    {
-      id: 10,
-      method: "POST",
-      status: 422,
-      endpoint: "api/validation",
-      responseTime: "45.67ms",
-      location: "Karlovac, Croatia",
-      timestamp: "15 days ago",
-      hoursAgo: 360,
-    },
-    {
-      id: 11,
-      method: "GET",
-      status: 200,
-      endpoint: "api/analytics",
-      responseTime: "89.34ms",
-      location: "Šibenik, Croatia",
-      timestamp: "25 days ago",
-      hoursAgo: 600,
-    },
-  ];
-
-  const filterByTime = (call: APICall) => {
+  const filterByTime = (call: APIResponse) => {
     const timeFilters: { [key: string]: number } = {
       "Last hour": 1,
       "Last 6 hours": 6,
@@ -143,25 +32,25 @@ const TableView = ({
     return maxHours ? call.hoursAgo <= maxHours : true;
   };
 
-  const filterByMethod = (call: APICall) => {
+  const filterByMethod = (call: APIResponse) => {
     if (selectedMethod === "All") return true;
     return call.method === selectedMethod;
   };
 
-  const filterByResponse = (call: APICall) => {
+  const filterByResponse = (call: APIResponse) => {
     if (selectedResponse === "All") return true;
-    if (selectedResponse === "2xx Success")
+    if (selectedResponse === "Success")
       return call.status >= 200 && call.status < 300;
-    if (selectedResponse === "3xx Redirect")
+    if (selectedResponse === "Redirect")
       return call.status >= 300 && call.status < 400;
-    if (selectedResponse === "4xx Client Error")
+    if (selectedResponse === "Client Error")
       return call.status >= 400 && call.status < 500;
-    if (selectedResponse === "5xx Server Error")
+    if (selectedResponse === "Server Error")
       return call.status >= 500 && call.status < 600;
     return true;
   };
 
-  const filteredCalls = allApiCalls.filter(
+  const filteredCalls = responses.filter(
     (call) =>
       filterByTime(call) && filterByMethod(call) && filterByResponse(call)
   );

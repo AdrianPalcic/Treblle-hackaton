@@ -1,4 +1,3 @@
-// UI Display Type - used in ListView/TableView components
 export type APICall = {
   id: number;
   method: string;
@@ -10,7 +9,6 @@ export type APICall = {
   hoursAgo: number;
 };
 
-// JSONPlaceholder API Response Types
 export type Todo = {
   userId: number;
   id: number;
@@ -55,16 +53,27 @@ export type Post = {
   body: string;
 };
 
-// Union type for all possible response data
-export type APIData = Todo | Todo[] | User | User[] | Album | Album[] | Post | Post[] | null;
+export type APIData =
+  | Todo
+  | Todo[]
+  | User
+  | User[]
+  | Album
+  | Album[]
+  | Post
+  | Post[]
+  | null;
 
-// Actual API Response Type - what comes from fetch() calls
 export type APIResponse = {
+  id: number;
   endpoint: string;
   method: string;
   status: number;
   responseTime: string;
+  location: string;
   data: APIData;
   timestamp: string;
+  hoursAgo: number;
   error?: string;
+  responseHeaders?: Record<string, string>;
 };

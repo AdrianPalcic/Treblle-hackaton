@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import TableView from "./components/TableView";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
-import type { APICall, APIResponse } from "./types";
+import type { APIResponse } from "./types";
 import Spinner from "./components/Spinner";
+import { getTimeDifference } from "./utils";
 
 function App() {
   // View states
@@ -30,17 +31,31 @@ function App() {
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedApiCall, setSelectedApiCall] = useState<APICall | null>(null);
+  const [selectedApiCall, setSelectedApiCall] = useState<APIResponse | null>(
+    null
+  );
 
   // API state
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [responses, setResponses] = useState<APIResponse[]>([]);
+  const [averageTime, setAverageTime] = useState<number>(0);
 
   //Need theeeese
   const baseURL = "https://jsonplaceholder.typicode.com";
   const endpoints = ["todos", "users", "albums", "posts"];
   const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
+
+  const calculateAverageResponseTime = (apiResponses: APIResponse[]) => {
+    if (apiResponses.length === 0) return 0;
+
+    const totalTime = apiResponses.reduce((sum, response) => {
+      const timeValue = parseFloat(response.responseTime.replace("ms", ""));
+      return sum + timeValue;
+    }, 0);
+
+    return totalTime / apiResponses.length;
+  };
 
   //God help me
   const callAPI = async () => {
@@ -49,6 +64,7 @@ function App() {
 
     try {
       const allResponses: APIResponse[] = [];
+      let idCounter = 1;
 
       for (const endpoint of endpoints) {
         for (const method of methods) {
@@ -73,6 +89,10 @@ function App() {
             const response = await fetch(`${baseURL}/${endpoint}`, options);
             const endTime = performance.now();
             const responseTime = (endTime - startTime).toFixed(2) + "ms";
+            const responseHeaders: Record<string, string> = {};
+            response.headers.forEach((value, key) => {
+              responseHeaders[key] = value;
+            });
 
             let data = null;
             try {
@@ -84,32 +104,49 @@ function App() {
               console.log("Error parsing JSON:", jsonError);
             }
 
+            const timestamp = new Date().toISOString();
+            const timeDiff = getTimeDifference(timestamp);
+
             allResponses.push({
+              id: idCounter++,
               endpoint,
               method,
               status: response.status,
               responseTime,
+              responseHeaders,
+              location: "Zagreb, Croatia",
               data,
-              timestamp: new Date().toISOString(),
+              timestamp: timeDiff.display,
+              hoursAgo: timeDiff.hours,
             });
           } catch (error) {
             console.error(`Error calling ${method} ${endpoint}:`, error);
-            // If one falls the army keeps going
+            const timestamp = new Date().toISOString();
+            const timeDiff = getTimeDifference(timestamp);
+
             allResponses.push({
+              id: idCounter++,
               endpoint,
               method,
               status: 0,
               responseTime: "0ms",
+              responseHeaders: {},
+              location: "Zagreb, Croatia",
               data: null,
+              timestamp: timeDiff.display,
+              hoursAgo: timeDiff.hours,
               error: String(error),
-              timestamp: new Date().toISOString(),
             });
           }
         }
       }
 
       setResponses(allResponses);
+      const avgTime = calculateAverageResponseTime(allResponses);
+      setAverageTime(avgTime);
+
       console.log("All API responses:", allResponses);
+      console.log("Average response time:", avgTime.toFixed(2) + "ms");
     } catch (error) {
       console.error("Error in API call:", error);
       setErrorMessage(
@@ -147,6 +184,7 @@ function App() {
           />
           {view === "List" ? (
             <ListView
+              responses={responses}
               selectedTime={selectedTime}
               selectedMethod={selectedMethod}
               selectedResponse={selectedResponse}
@@ -160,6 +198,7 @@ function App() {
             />
           ) : (
             <TableView
+              responses={responses}
               selectedTime={selectedTime}
               selectedMethod={selectedMethod}
               selectedResponse={selectedResponse}

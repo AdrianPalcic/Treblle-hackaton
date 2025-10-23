@@ -1,11 +1,11 @@
 import { X, Copy, Check } from "lucide-react";
 import { useState } from "react";
-import type { APICall } from "../types";
+import type { APIResponse } from "../types";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  apiCall: APICall | null;
+  apiCall: APIResponse | null;
 }
 
 const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
@@ -47,28 +47,18 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
   };
 
   const copyEndpoint = () => {
-    const fullUrl = `https://api.example.com/${apiCall.endpoint}`;
+    const fullUrl = `https://jsonplaceholder.typicode.com/${apiCall.endpoint}`;
     navigator.clipboard.writeText(fullUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Dummy data for demonstration
   const responseBody = {
-    success: true,
-    data: {
-      id: apiCall.id,
-      message: "Request processed successfully",
-      timestamp: new Date().toISOString(),
-    },
+    success: apiCall.status,
+    data: apiCall.data,
   };
 
-  const headers = {
-    "Content-Type": "application/json",
-    "X-Request-ID": `req_${Math.random().toString(36).substr(2, 9)}`,
-    "X-Response-Time": apiCall.responseTime,
-    "Cache-Control": "no-cache",
-  };
+  const headers = apiCall.responseHeaders || {};
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4">
@@ -166,19 +156,25 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
             Response Headers
           </h3>
           <div className="bg-tetriary/30 rounded-xl p-3 md:p-4 space-y-2">
-            {Object.entries(headers).map(([key, value]) => (
-              <div
-                key={key}
-                className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1"
-              >
-                <span className="text-white/60 font-mono text-xs md:text-sm">
-                  {key}:
-                </span>
-                <span className="font-mono text-xs md:text-sm break-all">
-                  {value}
-                </span>
-              </div>
-            ))}
+            {Object.keys(headers).length > 0 ? (
+              Object.entries(headers).map(([key, value]) => (
+                <div
+                  key={key}
+                  className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1"
+                >
+                  <span className="text-white/60 font-mono text-xs md:text-sm">
+                    {key}:
+                  </span>
+                  <span className="font-mono text-xs md:text-sm break-all">
+                    {value}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p className="text-white/40 text-xs md:text-sm text-center py-2">
+                No headers available
+              </p>
+            )}
           </div>
         </div>
 
