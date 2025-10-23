@@ -73,7 +73,7 @@ export type APIResponse = {
   location: string;
   data: APIData;
   timestamp: string;
-  hoursAgo: number;
+  createdAt: string;
   error?: string;
   responseHeaders?: Record<string, string>;
 };

@@ -1,5 +1,6 @@
 import { Clock, MapPin, Zap } from "lucide-react";
 import type { APIResponse } from "../types";
+import { getTimeDifference } from "../utils";
 
 const TableView = ({
   responses,
@@ -29,7 +30,8 @@ const TableView = ({
       "Last 30 days": 720,
     };
     const maxHours = timeFilters[selectedTime];
-    return maxHours ? call.hoursAgo <= maxHours : true;
+    const timeDiff = getTimeDifference(call.createdAt);
+    return maxHours ? timeDiff.hours <= maxHours : true;
   };
 
   const filterByMethod = (call: APIResponse) => {
@@ -57,9 +59,11 @@ const TableView = ({
 
   const apiCalls = [...filteredCalls].sort((a, b) => {
     if (activeSort === "createdAt") {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
       return sortByCreatedAt === "latest"
-        ? a.hoursAgo - b.hoursAgo
-        : b.hoursAgo - a.hoursAgo;
+        ? bTime - aTime
+        : aTime - bTime;
     } else {
       const parseResponseTime = (time: string) =>
         parseFloat(time.replace("ms", ""));
@@ -185,7 +189,7 @@ const TableView = ({
                           className="text-white/60 hidden md:block"
                         />
                         <span className="whitespace-nowrap">
-                          {call.timestamp}
+                          {getTimeDifference(call.createdAt).display}
                         </span>
                       </span>
                     </td>

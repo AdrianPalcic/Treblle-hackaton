@@ -8,7 +8,6 @@ import Footer from "./components/Footer";
 import Modal from "./components/Modal";
 import type { APIResponse } from "./types";
 import Spinner from "./components/Spinner";
-import { getTimeDifference } from "./utils";
 
 function App() {
   // View states
@@ -93,7 +92,6 @@ function App() {
             }
 
             const timestamp = new Date().toISOString();
-            const timeDiff = getTimeDifference(timestamp);
 
             allResponses.push({
               id: idCounter++,
@@ -104,13 +102,12 @@ function App() {
               responseHeaders,
               location: "Zagreb, Croatia",
               data,
-              timestamp: timeDiff.display,
-              hoursAgo: timeDiff.hours,
+              timestamp: timestamp,
+              createdAt: timestamp,
             });
           } catch (error) {
             console.error(`Error calling ${method} ${endpoint}:`, error);
             const timestamp = new Date().toISOString();
-            const timeDiff = getTimeDifference(timestamp);
 
             allResponses.push({
               id: idCounter++,
@@ -121,8 +118,8 @@ function App() {
               responseHeaders: {},
               location: "Zagreb, Croatia",
               data: null,
-              timestamp: timeDiff.display,
-              hoursAgo: timeDiff.hours,
+              timestamp: timestamp,
+              createdAt: timestamp,
               error: String(error),
             });
           }

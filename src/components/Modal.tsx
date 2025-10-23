@@ -74,7 +74,7 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
               API Call Details
             </h2>
             <p className="text-white/60 text-xs md:text-sm">
-              {apiCall.timestamp}
+              {new Date(apiCall.createdAt).toLocaleString()}
             </p>
           </div>
           <button
