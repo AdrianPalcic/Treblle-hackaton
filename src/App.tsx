@@ -9,11 +9,22 @@ import Modal from "./components/Modal";
 import type { APICall } from "./types";
 
 function App() {
+  // View states
   const [view, setView] = useState("List");
-  
+
+  // Sorting states
   const [selectedTime, setSelectedTime] = useState("Last 24h");
   const [selectedMethod, setSelectedMethod] = useState("All");
   const [selectedResponse, setSelectedResponse] = useState("All");
+  
+  // Active sort - only one can be active at a time
+  const [activeSort, setActiveSort] = useState<"createdAt" | "responseTime">("createdAt");
+  const [sortByCreatedAt, setSortByCreatedAt] = useState<"latest" | "oldest">(
+    "latest"
+  );
+  const [sortByResponseTime, setSortByResponseTime] = useState<
+    "fastest" | "slowest"
+  >("fastest");
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +35,7 @@ function App() {
       <Navbar />
       <Hero />
       <RequestBar 
-        view={view} 
+        view={view}
         setView={setView}
         selectedTime={selectedTime}
         setSelectedTime={setSelectedTime}
@@ -32,29 +43,41 @@ function App() {
         setSelectedMethod={setSelectedMethod}
         selectedResponse={selectedResponse}
         setSelectedResponse={setSelectedResponse}
+        activeSort={activeSort}
+        setActiveSort={setActiveSort}
+        sortByCreatedAt={sortByCreatedAt}
+        setSortByCreatedAt={setSortByCreatedAt}
+        sortByResponseTime={sortByResponseTime}
+        setSortByResponseTime={setSortByResponseTime}
       />
       {view === "List" ? (
-        <ListView 
+        <ListView
           selectedTime={selectedTime}
           selectedMethod={selectedMethod}
           selectedResponse={selectedResponse}
+          activeSort={activeSort}
+          sortByCreatedAt={sortByCreatedAt}
+          sortByResponseTime={sortByResponseTime}
           onApiCallClick={(call) => {
             setSelectedApiCall(call);
             setIsModalOpen(true);
           }}
         />
       ) : (
-        <TableView 
+        <TableView
           selectedTime={selectedTime}
           selectedMethod={selectedMethod}
           selectedResponse={selectedResponse}
+          activeSort={activeSort}
+          sortByCreatedAt={sortByCreatedAt}
+          sortByResponseTime={sortByResponseTime}
           onApiCallClick={(call) => {
             setSelectedApiCall(call);
             setIsModalOpen(true);
           }}
         />
       )}
-      <Modal 
+      <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         apiCall={selectedApiCall}

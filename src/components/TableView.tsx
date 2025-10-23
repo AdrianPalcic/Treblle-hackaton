@@ -5,11 +5,17 @@ const TableView = ({
   selectedTime,
   selectedMethod,
   selectedResponse,
+  activeSort,
+  sortByCreatedAt,
+  sortByResponseTime,
   onApiCallClick,
 }: {
   selectedTime: string;
   selectedMethod: string;
   selectedResponse: string;
+  activeSort: "createdAt" | "responseTime";
+  sortByCreatedAt: "latest" | "oldest";
+  sortByResponseTime: "fastest" | "slowest";
   onApiCallClick: (call: APICall) => void;
 }) => {
   const allApiCalls = [
@@ -155,10 +161,25 @@ const TableView = ({
     return true;
   };
 
-  const apiCalls = allApiCalls.filter(
+  const filteredCalls = allApiCalls.filter(
     (call) =>
       filterByTime(call) && filterByMethod(call) && filterByResponse(call)
   );
+
+  const apiCalls = [...filteredCalls].sort((a, b) => {
+    if (activeSort === "createdAt") {
+      return sortByCreatedAt === "latest"
+        ? a.hoursAgo - b.hoursAgo
+        : b.hoursAgo - a.hoursAgo;
+    } else {
+      const parseResponseTime = (time: string) =>
+        parseFloat(time.replace("ms", ""));
+      const aTime = parseResponseTime(a.responseTime);
+      const bTime = parseResponseTime(b.responseTime);
+
+      return sortByResponseTime === "fastest" ? aTime - bTime : bTime - aTime;
+    }
+  });
 
   const getMethodColor = (method: string) => {
     const colors: { [key: string]: string } = {
@@ -180,28 +201,28 @@ const TableView = ({
   };
 
   return (
-    <section className="max-w-6xl mx-auto ">
-      <div className="glass p-3 ">
-        <div className="overflow-x-auto bg-tetriary rounded-2xl">
-          <table className="w-full">
+    <section className="max-w-6xl mx-auto px-4">
+      <div className="glass p-2 md:p-3">
+        <div className="overflow-x-auto bg-tetriary rounded-2xl -mx-2 md:mx-0">
+          <table className="w-full min-w-[600px]">
             <thead>
               <tr className="border-b border-white/20">
-                <th className="text-left py-3 px-4 font-semibold text-white/80">
+                <th className="text-left py-2 md:py-3 px-2 md:px-4 font-semibold text-white/80 text-xs md:text-sm">
                   Method
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-white/80">
+                <th className="text-left py-2 md:py-3 px-2 md:px-4 font-semibold text-white/80 text-xs md:text-sm">
                   Status
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-white/80">
+                <th className="text-left py-2 md:py-3 px-2 md:px-4 font-semibold text-white/80 text-xs md:text-sm">
                   Endpoint
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-white/80">
-                  Response Time
+                <th className="text-left py-2 md:py-3 px-2 md:px-4 font-semibold text-white/80 text-xs md:text-sm">
+                  Response
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-white/80">
+                <th className="text-left py-2 md:py-3 px-2 md:px-4 font-semibold text-white/80 text-xs md:text-sm hidden lg:table-cell">
                   Location
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-white/80">
+                <th className="text-left py-2 md:py-3 px-2 md:px-4 font-semibold text-white/80 text-xs md:text-sm">
                   Time
                 </th>
               </tr>
@@ -209,11 +230,11 @@ const TableView = ({
             <tbody>
               {apiCalls.length < 1 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 px-4 text-center">
-                    <p className="text-xl text-white/60 font-light">
+                  <td colSpan={6} className="py-8 md:py-12 px-4 text-center">
+                    <p className="text-lg md:text-xl text-white/60 font-light">
                       No requests match your filters
                     </p>
-                    <p className="text-sm text-white/40 mt-2">
+                    <p className="text-xs md:text-sm text-white/40 mt-2">
                       Try adjusting your filter parameters
                     </p>
                   </td>
@@ -225,41 +246,58 @@ const TableView = ({
                     onClick={() => onApiCallClick(call)}
                     className="border-b border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
                   >
-                    <td className="py-4 px-4">
+                    <td className="py-3 md:py-4 px-2 md:px-4">
                       <div
-                        className={`method py-1 px-3 rounded-full text-[14px] font-semibold w-fit ${getMethodColor(
+                        className={`method py-1 px-2 md:px-3 rounded-full text-[11px] md:text-[14px] font-semibold w-fit ${getMethodColor(
                           call.method
                         )}`}
                       >
                         {call.method}
                       </div>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 md:py-4 px-2 md:px-4">
                       <div
-                        className={`response py-1 px-3 rounded-full text-[14px] font-semibold w-fit ${getStatusColor(
+                        className={`response py-1 px-2 md:px-3 rounded-full text-[11px] md:text-[14px] font-semibold w-fit ${getStatusColor(
                           call.status
                         )}`}
                       >
                         {call.status}
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-white/90">{call.endpoint}</td>
-                    <td className="py-4 px-4">
-                      <span className="flex gap-1 items-center font-extralight text-[14px]">
-                        <Zap size={18} className="text-white/60" />
-                        {call.responseTime}
+                    <td className="py-3 md:py-4 px-2 md:px-4 text-white/90 text-xs md:text-sm">
+                      {call.endpoint}
+                    </td>
+                    <td className="py-3 md:py-4 px-2 md:px-4">
+                      <span className="flex gap-1 items-center font-extralight text-[11px] md:text-[14px]">
+                        <Zap size={14} className="text-white/60 md:hidden" />
+                        <Zap
+                          size={18}
+                          className="text-white/60 hidden md:block"
+                        />
+                        <span className="hidden sm:inline">
+                          {call.responseTime}
+                        </span>
+                        <span className="sm:hidden">
+                          {call.responseTime.replace("ms", "")}
+                        </span>
                       </span>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-3 md:py-4 px-2 md:px-4 hidden lg:table-cell">
                       <span className="flex gap-1 items-center font-extralight text-[14px]">
                         <MapPin size={18} className="text-white/60" />
                         {call.location}
                       </span>
                     </td>
-                    <td className="py-4 px-4">
-                      <span className="flex gap-1 items-center font-extralight text-[14px]">
-                        <Clock size={18} className="text-white/60" />
-                        {call.timestamp}
+                    <td className="py-3 md:py-4 px-2 md:px-4">
+                      <span className="flex gap-1 items-center font-extralight text-[11px] md:text-[14px]">
+                        <Clock size={14} className="text-white/60 md:hidden" />
+                        <Clock
+                          size={18}
+                          className="text-white/60 hidden md:block"
+                        />
+                        <span className="whitespace-nowrap">
+                          {call.timestamp}
+                        </span>
                       </span>
                     </td>
                   </tr>

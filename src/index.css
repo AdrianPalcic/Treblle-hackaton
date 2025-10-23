@@ -19,6 +19,11 @@
     background: var(--color-tetriary);
     color: white;
     line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  * {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 .glass {
@@ -48,4 +53,21 @@
 }
 .request-border {
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile scrollbar styling */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
 }

@@ -5,11 +5,17 @@ const ListView = ({
   selectedTime,
   selectedMethod,
   selectedResponse,
+  activeSort,
+  sortByCreatedAt,
+  sortByResponseTime,
   onApiCallClick,
 }: {
   selectedTime: string;
   selectedMethod: string;
   selectedResponse: string;
+  activeSort: "createdAt" | "responseTime";
+  sortByCreatedAt: "latest" | "oldest";
+  sortByResponseTime: "fastest" | "slowest";
   onApiCallClick: (call: APICall) => void;
 }) => {
   const allApiCalls = [
@@ -155,10 +161,25 @@ const ListView = ({
     return true;
   };
 
-  const apiCalls = allApiCalls.filter(
+  const filteredCalls = allApiCalls.filter(
     (call) =>
       filterByTime(call) && filterByMethod(call) && filterByResponse(call)
   );
+
+  const apiCalls = [...filteredCalls].sort((a, b) => {
+    if (activeSort === "createdAt") {
+      return sortByCreatedAt === "latest"
+        ? a.hoursAgo - b.hoursAgo
+        : b.hoursAgo - a.hoursAgo;
+    } else {
+      const parseResponseTime = (time: string) =>
+        parseFloat(time.replace("ms", ""));
+      const aTime = parseResponseTime(a.responseTime);
+      const bTime = parseResponseTime(b.responseTime);
+
+      return sortByResponseTime === "fastest" ? aTime - bTime : bTime - aTime;
+    }
+  });
 
   const getMethodColor = (method: string) => {
     const colors: { [key: string]: string } = {
@@ -180,15 +201,15 @@ const ListView = ({
   };
 
   return (
-    <section className="max-w-6xl mx-auto ">
-      <div className="glass p-3">
+    <section className="max-w-6xl mx-auto px-4">
+      <div className="glass p-2 md:p-3">
         <div id="requests" className="flex flex-col gap-2 w-full">
           {apiCalls.length < 1 ? (
-            <div className="py-12 px-4 w-full text-center">
-              <p className="text-xl text-white/60 font-light">
+            <div className="py-8 md:py-12 px-4 w-full text-center">
+              <p className="text-lg md:text-xl text-white/60 font-light">
                 No requests match your filters
               </p>
-              <p className="text-sm text-white/40 mt-2">
+              <p className="text-xs md:text-sm text-white/40 mt-2">
                 Try adjusting your filter parameters
               </p>
             </div>
@@ -198,44 +219,60 @@ const ListView = ({
                 key={call.id}
                 id="request"
                 onClick={() => onApiCallClick(call)}
-                className="py-4 px-2 w-full bg-tetriary/30 rounded-2xl request-border flex justify-between items-center gap-4 hover:bg-white/5 cursor-pointer transition-all"
+                className="py-3 md:py-4 px-2 md:px-3 w-full bg-tetriary/30 rounded-2xl request-border flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 hover:bg-white/5 cursor-pointer transition-all"
               >
-                <div className="flex-1 ">
-                  <div className="flex flex-col gap-1">
-                    <div className="flex gap-2 items-center">
+                <div className="flex-1 w-full">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-wrap gap-2 items-center">
                       <div
-                        className={`method py-1 px-3 rounded-full text-[16px] font-semibold ${getMethodColor(
+                        className={`method py-1 px-2 md:px-3 rounded-full text-[13px] md:text-[16px] font-semibold ${getMethodColor(
                           call.method
                         )}`}
                       >
                         {call.method}
                       </div>
                       <div
-                        className={`response py-1 px-3 rounded-full text-[16px] font-semibold ${getStatusColor(
+                        className={`response py-1 px-2 md:px-3 rounded-full text-[13px] md:text-[16px] font-semibold ${getStatusColor(
                           call.status
                         )}`}
                       >
                         {call.status}
                       </div>
-                      <span>{call.endpoint}</span>
+                      <span className="text-sm md:text-base truncate">
+                        {call.endpoint}
+                      </span>
                     </div>
-                    <div className="flex gap-3 items-center mt-2">
-                      <span className="flex gap-1 items-center font-extralight text-[14px]">
-                        <Zap size={18} className="text-white/60" />
+                    <div className="flex flex-wrap gap-2 md:gap-3 items-center">
+                      <span className="flex gap-1 items-center font-extralight text-[12px] md:text-[14px]">
+                        <Zap size={16} className="text-white/60 md:hidden" />
+                        <Zap
+                          size={18}
+                          className="text-white/60 hidden md:block"
+                        />
                         {call.responseTime}
                       </span>
-                      <span className="flex gap-1 items-center font-extralight text-[14px]">
-                        <MapPin size={18} className="text-white/60" />
-                        {call.location}
+                      <span className="flex gap-1 items-center font-extralight text-[12px] md:text-[14px]">
+                        <MapPin size={16} className="text-white/60 md:hidden" />
+                        <MapPin
+                          size={18}
+                          className="text-white/60 hidden md:block"
+                        />
+                        <span className="truncate max-w-[120px] md:max-w-none">
+                          {call.location}
+                        </span>
                       </span>
-                      <span className="flex gap-1 items-center font-extralight text-[14px]">
-                        <Clock size={18} className="text-white/60" />
+                      <span className="flex gap-1 items-center font-extralight text-[12px] md:text-[14px]">
+                        <Clock size={16} className="text-white/60 md:hidden" />
+                        <Clock
+                          size={18}
+                          className="text-white/60 hidden md:block"
+                        />
                         {call.timestamp}
                       </span>
                     </div>
                   </div>
                 </div>
-                <div className="flex-1 border border-solid border-white"></div>
+                <div className="hidden md:block flex-1 border border-solid border-white"></div>
               </div>
             ))
           )}

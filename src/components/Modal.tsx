@@ -71,7 +71,7 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 md:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -79,32 +79,33 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass rounded-3xl p-6">
+      <div className="relative w-full max-w-3xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto glass rounded-2xl md:rounded-3xl p-4 md:p-6">
         {/* Header */}
-        <div className="flex justify-between items-start mb-6">
+        <div className="flex justify-between items-start mb-4 md:mb-6">
           <div>
-            <h2 className="text-2xl font-semibold mb-2">API Call Details</h2>
-            <p className="text-white/60 text-sm">{apiCall.timestamp}</p>
+            <h2 className="text-lg md:text-2xl font-semibold mb-1 md:mb-2">API Call Details</h2>
+            <p className="text-white/60 text-xs md:text-sm">{apiCall.timestamp}</p>
           </div>
           <button
             onClick={onClose}
             className="p-2 hover:bg-white/10 rounded-full transition-colors"
           >
-            <X size={24} />
+            <X size={20} className="md:hidden" />
+            <X size={24} className="hidden md:block" />
           </button>
         </div>
 
         {/* Method and Status */}
-        <div className="flex gap-3 items-center mb-6">
+        <div className="flex flex-wrap gap-2 md:gap-3 items-center mb-4 md:mb-6">
           <div
-            className={`method py-2 px-4 rounded-full text-[18px] font-semibold ${getMethodColor(
+            className={`method py-1.5 md:py-2 px-3 md:px-4 rounded-full text-[14px] md:text-[18px] font-semibold ${getMethodColor(
               apiCall.method
             )}`}
           >
             {apiCall.method}
           </div>
           <div
-            className={`response py-2 px-4 rounded-full text-[18px] font-semibold ${getStatusColor(
+            className={`response py-1.5 md:py-2 px-3 md:px-4 rounded-full text-[14px] md:text-[18px] font-semibold ${getStatusColor(
               apiCall.status
             )}`}
           >
@@ -113,53 +114,63 @@ const Modal = ({ isOpen, onClose, apiCall }: ModalProps) => {
         </div>
 
         {/* Endpoint with Copy Button */}
-        <div className="mb-6">
-          <label className="text-sm text-white/60 mb-2 block">Endpoint</label>
+        <div className="mb-4 md:mb-6">
+          <label className="text-xs md:text-sm text-white/60 mb-2 block">Endpoint</label>
           <div className="flex gap-2 items-center">
-            <div className="flex-1 bg-tetriary/50 rounded-xl p-3 font-mono text-sm">
+            <div className="flex-1 bg-tetriary/50 rounded-xl p-2 md:p-3 font-mono text-xs md:text-sm break-all">
               https://api.example.com/{apiCall.endpoint}
             </div>
             <button
               onClick={copyEndpoint}
-              className="p-3 bg-primary hover:bg-primary-light rounded-xl transition-colors"
+              className="p-2 md:p-3 bg-primary hover:bg-primary-light rounded-xl transition-colors flex-shrink-0"
             >
-              {copied ? <Check size={20} /> : <Copy size={20} />}
+              {copied ? (
+                <>
+                  <Check size={16} className="md:hidden" />
+                  <Check size={20} className="hidden md:block" />
+                </>
+              ) : (
+                <>
+                  <Copy size={16} className="md:hidden" />
+                  <Copy size={20} className="hidden md:block" />
+                </>
+              )}
             </button>
           </div>
         </div>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-tetriary/30 rounded-xl p-4">
-            <label className="text-sm text-white/60 mb-1 block">
+        <div className="grid grid-cols-2 gap-2 md:gap-4 mb-4 md:mb-6">
+          <div className="bg-tetriary/30 rounded-xl p-3 md:p-4">
+            <label className="text-xs md:text-sm text-white/60 mb-1 block">
               Response Time
             </label>
-            <p className="text-lg font-semibold">{apiCall.responseTime}</p>
+            <p className="text-base md:text-lg font-semibold">{apiCall.responseTime}</p>
           </div>
-          <div className="bg-tetriary/30 rounded-xl p-4">
-            <label className="text-sm text-white/60 mb-1 block">Location</label>
-            <p className="text-lg font-semibold">{apiCall.location}</p>
+          <div className="bg-tetriary/30 rounded-xl p-3 md:p-4">
+            <label className="text-xs md:text-sm text-white/60 mb-1 block">Location</label>
+            <p className="text-base md:text-lg font-semibold truncate">{apiCall.location}</p>
           </div>
         </div>
 
         {/* Response Headers */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3">Response Headers</h3>
-          <div className="bg-tetriary/30 rounded-xl p-4 space-y-2">
+        <div className="mb-4 md:mb-6">
+          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">Response Headers</h3>
+          <div className="bg-tetriary/30 rounded-xl p-3 md:p-4 space-y-2">
             {Object.entries(headers).map(([key, value]) => (
-              <div key={key} className="flex justify-between py-1">
-                <span className="text-white/60 font-mono text-sm">{key}:</span>
-                <span className="font-mono text-sm">{value}</span>
+              <div key={key} className="flex flex-col sm:flex-row sm:justify-between gap-1 py-1">
+                <span className="text-white/60 font-mono text-xs md:text-sm">{key}:</span>
+                <span className="font-mono text-xs md:text-sm break-all">{value}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Response Body */}
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-3">Response Body</h3>
-          <div className="bg-tetriary/30 rounded-xl p-4">
-            <pre className="text-sm font-mono overflow-x-auto text-white/90">
+        <div className="mb-2 md:mb-4">
+          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">Response Body</h3>
+          <div className="bg-tetriary/30 rounded-xl p-3 md:p-4">
+            <pre className="text-xs md:text-sm font-mono overflow-x-auto text-white/90">
               {JSON.stringify(responseBody, null, 2)}
             </pre>
           </div>
