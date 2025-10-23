@@ -69,9 +69,7 @@ const ListView = ({
     if (activeSort === "createdAt") {
       const aTime = new Date(a.createdAt).getTime();
       const bTime = new Date(b.createdAt).getTime();
-      return sortByCreatedAt === "latest"
-        ? bTime - aTime
-        : aTime - bTime;
+      return sortByCreatedAt === "latest" ? bTime - aTime : aTime - bTime;
     } else {
       const parseResponseTime = (time: string) =>
         parseFloat(time.replace("ms", ""));
@@ -107,7 +105,7 @@ const ListView = ({
   };
 
   return (
-    <section className="max-w-6xl mx-auto px-4">
+    <section id="dashboard" className="max-w-6xl mx-auto px-4">
       <div className="glass p-2 md:p-3">
         <div id="requests" className="flex flex-col gap-2 w-full mb-2">
           {apiCalls.length < 1 ? (

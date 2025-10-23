@@ -19,8 +19,6 @@ const RequestBar = ({
   setSortByResponseTime,
   selectedProblemType,
   setSelectedProblemType,
-  selectedSeverity,
-  setSelectedSeverity,
   activeProblemSort,
   setActiveProblemSort,
   problemsCount,
@@ -47,8 +45,6 @@ const RequestBar = ({
   >;
   selectedProblemType: string;
   setSelectedProblemType: React.Dispatch<React.SetStateAction<string>>;
-  selectedSeverity: string;
-  setSelectedSeverity: React.Dispatch<React.SetStateAction<string>>;
   activeProblemSort: "createdAt" | "responseTime" | "severity";
   setActiveProblemSort: React.Dispatch<
     React.SetStateAction<"createdAt" | "responseTime" | "severity">
@@ -103,13 +99,6 @@ const RequestBar = ({
     { value: "Error", color: "text-red-400" },
     { value: "Slow", color: "text-orange-400" },
     { value: "Critical", color: "text-purple-400" },
-  ];
-
-  const severityOptions = [
-    { value: "All", color: "text-white" },
-    { value: "High", color: "text-red-400" },
-    { value: "Medium", color: "text-yellow-400" },
-    { value: "Low", color: "text-blue-400" },
   ];
 
   const toggleDropdown = (dropdown: string) => {
@@ -339,40 +328,6 @@ const RequestBar = ({
                           }}
                           className={`px-4 py-2 rounded-lg cursor-pointer hover:bg-white/10 transition-colors ${
                             selectedProblemType === option.value
-                              ? "bg-white/10"
-                              : ""
-                          } ${option.color}`}
-                        >
-                          {option.value}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="relative">
-                  <div
-                    onClick={() => toggleDropdown("severity")}
-                    className="tag flex items-center gap-1 py-1.5 md:py-2 px-2 md:px-4 bg-fourth rounded-full cursor-pointer hover:bg-fifth transition-colors text-xs md:text-sm whitespace-nowrap"
-                  >
-                    <span className="hidden sm:inline">
-                      Severity: {selectedSeverity}
-                    </span>
-                    <span className="sm:hidden">{selectedSeverity}</span>
-                    <ChevronsUpDown size={16} className="md:hidden" />
-                    <ChevronsUpDown size={20} className="hidden md:block" />
-                  </div>
-                  {openDropdown === "severity" && (
-                    <div className="absolute top-full mt-2 right-0 tag bg-tetriary rounded-xl p-2 min-w-[150px] z-1000">
-                      {severityOptions.map((option) => (
-                        <div
-                          key={option.value}
-                          onClick={() => {
-                            setSelectedSeverity(option.value);
-                            setOpenDropdown(null);
-                          }}
-                          className={`px-4 py-2 rounded-lg cursor-pointer hover:bg-white/10 transition-colors ${
-                            selectedSeverity === option.value
                               ? "bg-white/10"
                               : ""
                           } ${option.color}`}

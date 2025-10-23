@@ -30,7 +30,6 @@ function App() {
   >("fastest");
 
   const [selectedProblemType, setSelectedProblemType] = useState("All");
-  const [selectedSeverity, setSelectedSeverity] = useState("All");
   const [activeProblemSort, setActiveProblemSort] = useState<
     "createdAt" | "responseTime" | "severity"
   >("severity");
@@ -181,8 +180,6 @@ function App() {
             setSortByResponseTime={setSortByResponseTime}
             selectedProblemType={selectedProblemType}
             setSelectedProblemType={setSelectedProblemType}
-            selectedSeverity={selectedSeverity}
-            setSelectedSeverity={setSelectedSeverity}
             activeProblemSort={activeProblemSort}
             setActiveProblemSort={setActiveProblemSort}
             problemsCount={problems.length}
@@ -226,7 +223,6 @@ function App() {
               problems={problems}
               selectedTime={selectedTime}
               selectedType={selectedProblemType}
-              selectedSeverity={selectedSeverity}
               selectedMethod={selectedMethod}
               activeSort={activeProblemSort}
               sortByCreatedAt={sortByCreatedAt}
@@ -249,7 +245,6 @@ function App() {
               problems={problems}
               selectedTime={selectedTime}
               selectedType={selectedProblemType}
-              selectedSeverity={selectedSeverity}
               selectedMethod={selectedMethod}
               activeSort={activeProblemSort}
               sortByCreatedAt={sortByCreatedAt}

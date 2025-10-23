@@ -14,6 +14,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     font-family: "DM Sans", sans-serif;
     background: var(--color-tetriary);
@@ -21,7 +24,7 @@
     line-height: 1.6;
     overflow-x: hidden;
   }
-  
+
   * {
     -webkit-tap-highlight-color: transparent;
   }
@@ -60,11 +63,11 @@
     width: 4px;
     height: 4px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
@@ -72,7 +75,8 @@
 }
 
 @keyframes float1 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -84,7 +88,8 @@
 }
 
 @keyframes float2 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -96,7 +101,8 @@
 }
 
 @keyframes float3 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -108,7 +114,8 @@
 }
 
 @keyframes float4 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -120,7 +127,8 @@
 }
 
 @keyframes colorShift1 {
-  0%, 100% {
+  0%,
+  100% {
     filter: blur(150px) hue-rotate(0deg);
   }
   50% {
@@ -129,7 +137,8 @@
 }
 
 @keyframes colorShift2 {
-  0%, 100% {
+  0%,
+  100% {
     filter: blur(140px) hue-rotate(0deg);
   }
   50% {
@@ -138,7 +147,8 @@
 }
 
 @keyframes colorShift3 {
-  0%, 100% {
+  0%,
+  100% {
     filter: blur(160px) hue-rotate(0deg);
   }
   50% {
@@ -147,7 +157,8 @@
 }
 
 @keyframes colorShift4 {
-  0%, 100% {
+  0%,
+  100% {
     filter: blur(135px) hue-rotate(0deg);
   }
   50% {

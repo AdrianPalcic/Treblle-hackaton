@@ -68,9 +68,7 @@ const TableView = ({
     if (activeSort === "createdAt") {
       const aTime = new Date(a.createdAt).getTime();
       const bTime = new Date(b.createdAt).getTime();
-      return sortByCreatedAt === "latest"
-        ? bTime - aTime
-        : aTime - bTime;
+      return sortByCreatedAt === "latest" ? bTime - aTime : aTime - bTime;
     } else {
       const parseResponseTime = (time: string) =>
         parseFloat(time.replace("ms", ""));
@@ -106,7 +104,7 @@ const TableView = ({
   };
 
   return (
-    <section className="max-w-6xl mx-auto px-4">
+    <section id="dashboard" className="max-w-6xl mx-auto px-4">
       <div className="glass p-2 md:p-3">
         <div className="overflow-x-auto bg-tetriary rounded-2xl -mx-2 md:mx-0 mb-2">
           <table className="w-full min-w-[600px]">

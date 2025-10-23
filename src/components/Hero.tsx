@@ -6,7 +6,8 @@ const Hero = () => {
         style={{
           background:
             "radial-gradient(circle, #e1207a 0%, #ff6b35 35%, #f5348e 55%, transparent 75%)",
-          animation: "float1 20s ease-in-out infinite, colorShift1 15s ease-in-out infinite",
+          animation:
+            "float1 20s ease-in-out infinite, colorShift1 15s ease-in-out infinite",
         }}
       />
       <div
@@ -14,7 +15,8 @@ const Hero = () => {
         style={{
           background:
             "radial-gradient(circle, #ff6b35 0%, #ff8c42 30%, #e1207a 55%, transparent 75%)",
-          animation: "float2 25s ease-in-out infinite, colorShift2 18s ease-in-out infinite",
+          animation:
+            "float2 25s ease-in-out infinite, colorShift2 18s ease-in-out infinite",
         }}
       />
       <div
@@ -22,7 +24,8 @@ const Hero = () => {
         style={{
           background:
             "radial-gradient(circle, #9103eb 0%, #e1207a 38%, #ff6b35 65%, transparent 80%)",
-          animation: "float3 22s ease-in-out infinite, colorShift3 20s ease-in-out infinite",
+          animation:
+            "float3 22s ease-in-out infinite, colorShift3 20s ease-in-out infinite",
         }}
       />
       <div
@@ -30,7 +33,8 @@ const Hero = () => {
         style={{
           background:
             "radial-gradient(circle, #ff8c42 0%, #9103eb 45%, #e1207a 75%, transparent 85%)",
-          animation: "float4 28s ease-in-out infinite, colorShift4 16s ease-in-out infinite",
+          animation:
+            "float4 28s ease-in-out infinite, colorShift4 16s ease-in-out infinite",
         }}
       />
 
@@ -47,9 +51,11 @@ const Hero = () => {
           RunTime AI monitors, analyzes, and optimizes your API's so you can
           focus on building - not debugging
         </p>
-        <button className="button-secondary glass transition-all duration-300 hover:bg-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.3),0_0_60px_rgba(255,255,255,0.15)] hover:scale-105 text-sm sm:text-base md:text-lg">
-          Start Monitoring Now
-        </button>
+        <a href="#dashboard" className="mx-auto w-fit">
+          <button className="button-secondary glass transition-all duration-300 hover:bg-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.3),0_0_60px_rgba(255,255,255,0.15)] hover:scale-105 text-sm sm:text-base md:text-lg">
+            Start Monitoring Now
+          </button>
+        </a>
       </div>
     </section>
   );

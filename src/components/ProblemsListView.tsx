@@ -9,7 +9,6 @@ const ProblemsListView = ({
   problems,
   selectedTime,
   selectedType,
-  selectedSeverity,
   selectedMethod,
   activeSort,
   sortByCreatedAt,
@@ -21,7 +20,6 @@ const ProblemsListView = ({
   problems: Problem[];
   selectedTime: string;
   selectedType: string;
-  selectedSeverity: string;
   selectedMethod: string;
   activeSort: "createdAt" | "responseTime" | "severity";
   sortByCreatedAt: "latest" | "oldest";
@@ -48,11 +46,6 @@ const ProblemsListView = ({
     return problem.type === selectedType.toLowerCase();
   };
 
-  const filterBySeverity = (problem: Problem) => {
-    if (selectedSeverity === "All") return true;
-    return problem.severity === selectedSeverity.toLowerCase();
-  };
-
   const filterByMethod = (problem: Problem) => {
     if (selectedMethod === "All") return true;
     return problem.method === selectedMethod;
@@ -62,7 +55,6 @@ const ProblemsListView = ({
     (problem) =>
       filterByTime(problem) &&
       filterByType(problem) &&
-      filterBySeverity(problem) &&
       filterByMethod(problem)
   );
 
