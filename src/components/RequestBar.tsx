@@ -12,7 +12,6 @@ const RequestBar = ({
   setSelectedMethod,
   selectedResponse,
   setSelectedResponse,
-  activeSort,
   setActiveSort,
   sortByCreatedAt,
   setSortByCreatedAt,
@@ -121,7 +120,6 @@ const RequestBar = ({
     <section className="max-w-6xl mx-auto mb-4 relative z-50 px-4">
       <div className="bar w-full glass px-3 md:px-4 py-3 md:py-2 rounded-2xl md:rounded-full">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-0">
-          {/* Mode Toggle */}
           <div className="flex items-center gap-2">
             <div className="flex items-center p-1 rounded-full glass text-xs md:text-sm">
               <span
@@ -153,7 +151,6 @@ const RequestBar = ({
             className="flex flex-wrap gap-2 md:gap-4 items-center w-full md:w-auto"
             ref={dropdownRef}
           >
-            {/* List/Table Toggle */}
             <div className="view flex items-center p-1 rounded-full glass text-xs md:text-sm">
               <span
                 onClick={() => setView("List")}
@@ -173,7 +170,6 @@ const RequestBar = ({
               </span>
             </div>
 
-            {/* Time Filter */}
             <div className="relative">
               <div
                 onClick={() => toggleDropdown("time")}
@@ -206,7 +202,6 @@ const RequestBar = ({
               )}
             </div>
 
-            {/* Method Filter */}
             <div className="relative">
               <div
                 onClick={() => toggleDropdown("method")}
@@ -239,10 +234,8 @@ const RequestBar = ({
               )}
             </div>
 
-            {/* Conditional Filters based on viewMode */}
             {viewMode === "requests" ? (
               <>
-                {/* Response Filter */}
                 <div className="relative">
                   <div
                     onClick={() => toggleDropdown("response")}
@@ -283,7 +276,6 @@ const RequestBar = ({
                   )}
                 </div>
 
-                {/* Sort Buttons for Requests */}
                 <button
                   onClick={() => {
                     setActiveSort("createdAt");
@@ -324,7 +316,6 @@ const RequestBar = ({
               </>
             ) : (
               <>
-                {/* Problem Type Filter */}
                 <div className="relative">
                   <div
                     onClick={() => toggleDropdown("problemType")}
@@ -359,7 +350,6 @@ const RequestBar = ({
                   )}
                 </div>
 
-                {/* Severity Filter */}
                 <div className="relative">
                   <div
                     onClick={() => toggleDropdown("severity")}
@@ -394,7 +384,6 @@ const RequestBar = ({
                   )}
                 </div>
 
-                {/* Sort Button for Problems */}
                 <button
                   onClick={() => {
                     if (activeProblemSort === "severity") {
