@@ -1,13 +1,16 @@
 import { Clock, MapPin, Zap } from "lucide-react";
+import type { APICall } from "../types";
 
 const TableView = ({
   selectedTime,
   selectedMethod,
   selectedResponse,
+  onApiCallClick,
 }: {
   selectedTime: string;
   selectedMethod: string;
   selectedResponse: string;
+  onApiCallClick: (call: APICall) => void;
 }) => {
   const allApiCalls = [
     {
@@ -122,7 +125,7 @@ const TableView = ({
     },
   ];
 
-  const filterByTime = (call: (typeof allApiCalls)[0]) => {
+  const filterByTime = (call: APICall) => {
     const timeFilters: { [key: string]: number } = {
       "Last hour": 1,
       "Last 6 hours": 6,
@@ -134,12 +137,12 @@ const TableView = ({
     return maxHours ? call.hoursAgo <= maxHours : true;
   };
 
-  const filterByMethod = (call: (typeof allApiCalls)[0]) => {
+  const filterByMethod = (call: APICall) => {
     if (selectedMethod === "All") return true;
     return call.method === selectedMethod;
   };
 
-  const filterByResponse = (call: (typeof allApiCalls)[0]) => {
+  const filterByResponse = (call: APICall) => {
     if (selectedResponse === "All") return true;
     if (selectedResponse === "2xx Success")
       return call.status >= 200 && call.status < 300;
@@ -219,7 +222,8 @@ const TableView = ({
                 apiCalls.map((call) => (
                   <tr
                     key={call.id}
-                    className="border-b border-white/10 hover:bg-white/5 transition-colors"
+                    onClick={() => onApiCallClick(call)}
+                    className="border-b border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
                   >
                     <td className="py-4 px-4">
                       <div

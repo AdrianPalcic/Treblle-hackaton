@@ -1,16 +1,18 @@
 import { Clock, MapPin, Zap } from "lucide-react";
+import type { APICall } from "../types";
 
 const ListView = ({
   selectedTime,
   selectedMethod,
   selectedResponse,
+  onApiCallClick,
 }: {
   selectedTime: string;
   selectedMethod: string;
   selectedResponse: string;
+  onApiCallClick: (call: APICall) => void;
 }) => {
   const allApiCalls = [
-    // Last hour
     {
       id: 1,
       method: "GET",
@@ -31,7 +33,6 @@ const ListView = ({
       timestamp: "45 min ago",
       hoursAgo: 0.75,
     },
-    // Last 6 hours
     {
       id: 3,
       method: "GET",
@@ -52,7 +53,6 @@ const ListView = ({
       timestamp: "5 hours ago",
       hoursAgo: 5,
     },
-    // Last 24h
     {
       id: 5,
       method: "DELETE",
@@ -83,7 +83,6 @@ const ListView = ({
       timestamp: "20 hours ago",
       hoursAgo: 20,
     },
-    // Last 7 days
     {
       id: 8,
       method: "GET",
@@ -104,7 +103,6 @@ const ListView = ({
       timestamp: "5 days ago",
       hoursAgo: 120,
     },
-    // Last 30 days
     {
       id: 10,
       method: "POST",
@@ -127,38 +125,39 @@ const ListView = ({
     },
   ];
 
-  // Filter by time period
-  const filterByTime = (call: typeof allApiCalls[0]) => {
+  const filterByTime = (call: APICall) => {
     const timeFilters: { [key: string]: number } = {
       "Last hour": 1,
       "Last 6 hours": 6,
       "Last 24h": 24,
-      "Last 7 days": 168, // 7 * 24
-      "Last 30 days": 720, // 30 * 24
+      "Last 7 days": 168,
+      "Last 30 days": 720,
     };
     const maxHours = timeFilters[selectedTime];
     return maxHours ? call.hoursAgo <= maxHours : true;
   };
 
-  // Filter by method
-  const filterByMethod = (call: typeof allApiCalls[0]) => {
+  const filterByMethod = (call: APICall) => {
     if (selectedMethod === "All") return true;
     return call.method === selectedMethod;
   };
 
-  // Filter by response status
-  const filterByResponse = (call: typeof allApiCalls[0]) => {
+  const filterByResponse = (call: APICall) => {
     if (selectedResponse === "All") return true;
-    if (selectedResponse === "2xx Success") return call.status >= 200 && call.status < 300;
-    if (selectedResponse === "3xx Redirect") return call.status >= 300 && call.status < 400;
-    if (selectedResponse === "4xx Client Error") return call.status >= 400 && call.status < 500;
-    if (selectedResponse === "5xx Server Error") return call.status >= 500 && call.status < 600;
+    if (selectedResponse === "2xx Success")
+      return call.status >= 200 && call.status < 300;
+    if (selectedResponse === "3xx Redirect")
+      return call.status >= 300 && call.status < 400;
+    if (selectedResponse === "4xx Client Error")
+      return call.status >= 400 && call.status < 500;
+    if (selectedResponse === "5xx Server Error")
+      return call.status >= 500 && call.status < 600;
     return true;
   };
 
-  // Apply all filters
   const apiCalls = allApiCalls.filter(
-    (call) => filterByTime(call) && filterByMethod(call) && filterByResponse(call)
+    (call) =>
+      filterByTime(call) && filterByMethod(call) && filterByResponse(call)
   );
 
   const getMethodColor = (method: string) => {
@@ -198,7 +197,8 @@ const ListView = ({
               <div
                 key={call.id}
                 id="request"
-                className="py-4 px-2 w-full bg-tetriary/30 rounded-2xl request-border flex justify-between items-center gap-4 hover:bg-white/5 cursor-pointer"
+                onClick={() => onApiCallClick(call)}
+                className="py-4 px-2 w-full bg-tetriary/30 rounded-2xl request-border flex justify-between items-center gap-4 hover:bg-white/5 cursor-pointer transition-all"
               >
                 <div className="flex-1 ">
                   <div className="flex flex-col gap-1">

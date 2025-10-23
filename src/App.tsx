@@ -5,6 +5,8 @@ import RequestBar from "./components/RequestBar";
 import { useState } from "react";
 import TableView from "./components/TableView";
 import Footer from "./components/Footer";
+import Modal from "./components/Modal";
+import type { APICall } from "./types";
 
 function App() {
   const [view, setView] = useState("List");
@@ -12,6 +14,10 @@ function App() {
   const [selectedTime, setSelectedTime] = useState("Last 24h");
   const [selectedMethod, setSelectedMethod] = useState("All");
   const [selectedResponse, setSelectedResponse] = useState("All");
+
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedApiCall, setSelectedApiCall] = useState<APICall | null>(null);
 
   return (
     <main>
@@ -32,14 +38,27 @@ function App() {
           selectedTime={selectedTime}
           selectedMethod={selectedMethod}
           selectedResponse={selectedResponse}
+          onApiCallClick={(call) => {
+            setSelectedApiCall(call);
+            setIsModalOpen(true);
+          }}
         />
       ) : (
         <TableView 
           selectedTime={selectedTime}
           selectedMethod={selectedMethod}
           selectedResponse={selectedResponse}
+          onApiCallClick={(call) => {
+            setSelectedApiCall(call);
+            setIsModalOpen(true);
+          }}
         />
       )}
+      <Modal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        apiCall={selectedApiCall}
+      />
       <Footer />
     </main>
   );

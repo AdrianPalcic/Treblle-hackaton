@@ -1,5 +1,10 @@
 export type APICall = {
+  id: number;
   method: string;
-  createdAt: string;
+  status: number;
+  endpoint: string;
   responseTime: string;
+  location: string;
+  timestamp: string;
+  hoursAgo: number;
 };
